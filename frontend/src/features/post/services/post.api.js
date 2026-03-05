@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const api=axios.create({
-    baseURL:"https://devgram-brx9.onrender.com"
+    baseURL:"https://devgram.onrender.com"
     ,withCredentials:true
 })
 
