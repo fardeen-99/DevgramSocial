@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const api=axios.create({
-    baseURL:"https://DevGram.onrender.com",
+    baseURL:"https://devgram-brx9.onrender.com",
     withCredentials:true
 })
 
@@ -40,6 +40,6 @@ export const Logout=async()=>{
 
 export const getallpost=async()=>{
 
-  const res=await axios.get("http://localhost:3000/api/post",{withCredentials:true})
+  const res=await axios.get("https://devgram-brx9.onrender.com/api/post",{withCredentials:true})
   return res.data
 }

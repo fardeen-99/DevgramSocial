@@ -12,7 +12,7 @@ const app=express()
 
 app.use(cors({
 credentials:true,
-origin:"https://DevGram.onrender.com"
+origin:"https://devgram-brx9.onrender.com"
 }))
 app.use(cookie())
 app.use(express.static("public"))
