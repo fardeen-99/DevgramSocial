@@ -23,9 +23,7 @@ app.use("/api/user",UserFollowRouter)
 app.use("/api/feedback",feedbackRouter)
 
 const path=require("path")
-// app.get("*Name",(req,res)=>{
-// res.sendFile(path.join(__dirname,"..","/public/index.html"))
-// })
+
 app.get("*Name",(req,res)=>{
     res.sendFile(path.join(__dirname,"..","/public/index.html"))
 })
