@@ -11,8 +11,8 @@ const cors=require("cors")
 const app=express()
 
 app.use(cors({
-credentials:true,
-origin:"https://devgram-brx9.onrender.com"
+    origin:"https://devgram-brx9.onrender.com",
+credentials:true
 }))
 app.use(cookie())
 app.use(express.static("public"))
