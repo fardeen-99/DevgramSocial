@@ -40,6 +40,6 @@ export const Logout = async () => {
 
 export const getallpost = async () => {
 
-  const res = await axios.get("/post")
+  const res = await api.get("/post")
   return res.data
 }

@@ -11,7 +11,7 @@ const api=axios.create({
 
 export const like=async(id)=>{
   const res=  await api.post(`/post/like/${id}`)
-  return res.data
+  return res.data   
 }
 export const unlike=async(id)=>{
   const res=  await api.post(`/post/unlike/${id}`)

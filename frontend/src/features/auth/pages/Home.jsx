@@ -117,7 +117,7 @@ const scrollLeft = () => {
   </div> */}
 
         {
-          allpost.map((item) => {
+          allpost?.map((item) => {
             return (
               <section key={item._id} className='w-full text-xl capitalize font-semibold pb-6    flex flex-col gap-1'>
 
