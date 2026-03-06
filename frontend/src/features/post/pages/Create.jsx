@@ -7,7 +7,7 @@ const Create = () => {
   const { uploadHandle } = usePost()
   const refu = useRef()
   const navigate = useNavigate()
-
+const [stop,setstop]=useState(false)
   const [file, setfile] = useState(null)
   const [caption, setcaption] = useState("")
   const [preview, setpreview] = useState(null)
@@ -35,6 +35,7 @@ const Create = () => {
   }
 
   const submitUpload = async (e) => {
+setstop(true)
     e.preventDefault()
 
     const formset = new FormData()
@@ -42,7 +43,7 @@ const Create = () => {
     formset.append("caption", caption)
 
     await uploadHandle(formset)
-
+setstop(false)
     navigate("/")
   }
 
@@ -143,8 +144,10 @@ const Create = () => {
         </div>
 
         {/* BUTTON */}
+        {stop && <p className='text-white text-sm font-semibold tracking-widest uppercase'>Uploading...</p>}
         <button
           className='w-[90%] m-auto py-3 active:scale-90 rounded-xl font-bold text-sm tracking-widest uppercase bg-blue-600 text-white'
+          disabled={stop}
         >
           Upload Post
         </button>
