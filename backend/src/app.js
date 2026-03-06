@@ -10,10 +10,8 @@ const cors=require("cors")
 
 const app=express()
 
-app.use(cors({
-    origin:"https://devgram-brx9.onrender.com",
-credentials:true
-}))
+
+app.use(cors())
 app.use(cookie())
 app.use(express.static("public"))
 app.use(express.json())
@@ -24,7 +22,7 @@ app.use("/api/feedback",feedbackRouter)
 
 const path=require("path")
 
-app.get("*",(req,res)=>{
+app.get("*Name",(req,res)=>{
     res.sendFile(path.join(__dirname,"..","/public/index.html"))
 })
 

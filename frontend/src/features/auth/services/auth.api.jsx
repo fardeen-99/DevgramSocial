@@ -1,14 +1,14 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: "https://devgram.onrender.com",
+  baseURL: "/api",
   withCredentials: true
 })
 
 export const Login = async (form) => {
 
   try {
-    const res = await api.post("/api/auth/login", form)
+    const res = await api.post("/auth/login", form)
     return res.data
   } catch (error) {
     throw error
@@ -17,7 +17,7 @@ export const Login = async (form) => {
 export const Register = async (form) => {
 
   try {
-    const res = await api.post("/api/auth/register", form)
+    const res = await api.post("/auth/register", form)
     return res.data
   } catch (error) {
     throw error
@@ -25,7 +25,7 @@ export const Register = async (form) => {
 }
 export const Getme = async () => {
 
-  const res = await api.get("/api/auth/get-me")
+  const res = await api.get("/auth/get-me")
   console.log(res.data.user)
   return res.data
 
@@ -34,12 +34,12 @@ export const Getme = async () => {
 }
 export const Logout = async () => {
 
-  const res = await api.post("/api/auth/logout")
+  const res = await api.post("/auth/logout")
   return res.data
 }
 
 export const getallpost = async () => {
 
-  const res = await axios.get("https://devgram.onrender.com/api/post", { withCredentials: true })
+  const res = await axios.get("/post")
   return res.data
 }
