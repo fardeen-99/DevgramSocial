@@ -144,7 +144,7 @@ const Create = () => {
 
         {/* BUTTON */}
         <button
-          className='w-[90%] m-auto py-3 active:scale-95 rounded-xl font-bold text-sm tracking-widest uppercase bg-blue-600 text-white'
+          className='w-[90%] m-auto py-3 active:scale-90 rounded-xl font-bold text-sm tracking-widest uppercase bg-blue-600 text-white'
         >
           Upload Post
         </button>

@@ -125,7 +125,7 @@ const scrollLeft = () => {
                   <div className='flex gap-2 items-center '
                   onClick={()=>navigate(`/personprofile/${item.user._id}`)}
                   >
-                    <img className='h-8 rounded-full w-8 shrink-0' src={item.user.profile_image} alt="" />
+                    <img className='h-8 rounded-full w-8 shrink-0 ' src={item.user.profile_image} alt="" />
                     <p>{item.user.username}</p>
                   </div>
                   <button
@@ -135,7 +135,7 @@ const scrollLeft = () => {
                     style={{ display: user.id === item.user._id ? "none" : "block" }}
                   >{item.isfollow ? "following" : "follow"}</button>
                 </div>
-                <div className='flex flex-col w-full gap-2 h-100 text-white relative'
+                <div className='flex flex-col w-full gap-2 h-130 text-white relative'
 
                 >
                   {
@@ -155,7 +155,7 @@ const scrollLeft = () => {
                   >{item.mediatype === "non-image" && (item._id === sound ? <img src='sound.png' className='h-6 text-white' /> : <img src='mute.png' className='h-7' />)}</div>
                 </div>
                 <div className='flex text-xl px-1 pt-1 justify-between w-full text-white'>
-                  <div className='flex items-center gap-1'>
+                  <div className='flex items-center gap-1 ml-1'>
 
                     {/* Like Button */}
                     <div className='flex items-center cursor-pointer active:scale-95 transition-all'

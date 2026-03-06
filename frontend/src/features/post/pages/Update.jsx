@@ -40,7 +40,7 @@ const [file,setfile]=useState(null)
                 value={form.bio}
                 onChange={(e)=>setform({...form,bio:e.target.value})}
                 />
-                <button type="submit" className='w-full p-4 rounded-xl bg-yellow-600 font-bold text-white'>Update</button>
+                <button type="submit" className='active:scale-90  w-full p-4 rounded-xl bg-yellow-600 font-bold text-white'>Update</button>
                 </div>
             </form>
         </div>

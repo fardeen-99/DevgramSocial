@@ -111,7 +111,9 @@ const DetailPost = () => {
               <form
                 onSubmit={submitcomment}
                 className='absolute bottom-2 right-2 flex gap-2 items-center capitalize  w-[95%] m-auto text-white text-lg font-semibold '>
-                <input type="text" placeholder='Add comment' className='w-full border px-3 border-gray-300 outline-none py-3  rounded-xl' value={comment} onChange={(e) => setComment(e.target.value)} />
+                <input type="text"
+                required
+                placeholder='Add comment' className='w-full border px-3 border-gray-300 outline-none py-3  rounded-xl' value={comment} onChange={(e) => setComment(e.target.value)} />
                 <button className='rounded-xl bg-yellow-600 px-6 py-3'>Post</button>
               </form>
             </div>

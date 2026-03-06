@@ -22,7 +22,7 @@ const Applayout = () => {
 
 </div>
     </div>
-     <Footer/>
+ {!location.pathname.startsWith("/reel") && <Footer />}
     </>
   )
 }
