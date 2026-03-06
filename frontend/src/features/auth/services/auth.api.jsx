@@ -1,45 +1,45 @@
 import axios from 'axios'
 
-const api=axios.create({
-    baseURL:"https://devgram.onrender.com",
-    withCredentials:true
+const api = axios.create({
+  baseURL: "https://devgram.onrender.com",
+  withCredentials: true
 })
 
-export const Login=async(form)=>{
-    
-  try {
-   const res= await api.post("/api/auth/login",form)
-   return res.data
-  } catch (error) {
-    throw err
-  }
-} 
-export const Register=async(form)=>{
-    
-  try {
-   const res= await api.post("/api/auth/register",form)
-   return res.data
-  } catch (error) {
-    throw err
-  }
-} 
-export const Getme=async()=>{
+export const Login = async (form) => {
 
- const res=await api.get("/api/auth/get-me")
- console.log(res.data.user)
-return res.data
+  try {
+    const res = await api.post("/api/auth/login", form)
+    return res.data
+  } catch (error) {
+    throw error
+  }
+}
+export const Register = async (form) => {
+
+  try {
+    const res = await api.post("/api/auth/register", form)
+    return res.data
+  } catch (error) {
+    throw error
+  }
+}
+export const Getme = async () => {
+
+  const res = await api.get("/api/auth/get-me")
+  console.log(res.data.user)
+  return res.data
 
 
 
 }
-export const Logout=async()=>{
+export const Logout = async () => {
 
-  const res=await api.post("/api/auth/logout")
+  const res = await api.post("/api/auth/logout")
   return res.data
 }
 
-export const getallpost=async()=>{
+export const getallpost = async () => {
 
-  const res=await axios.get("https://devgram.onrender.com/api/post",{withCredentials:true})
+  const res = await axios.get("https://devgram.onrender.com/api/post", { withCredentials: true })
   return res.data
 }
