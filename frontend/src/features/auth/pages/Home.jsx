@@ -14,6 +14,8 @@ import StoryHub from '../../post/components/StoryHub';
 
 import { GoPlus } from "react-icons/go";
 import Caption from '../../post/components/Caption';
+import { useLoader } from '../../../../Loader.context';
+import Loadera from '../../../../Loader';
 
 
 const Home = () => {
@@ -26,9 +28,12 @@ const Home = () => {
   const toggle = (id) => {
     setexpand((prev) => prev === id ? null : id)
   }
-  const { user, allpost, handlegetallpost } = Useauth()
+const {setloader,loader}=useLoader()
+  const { user, allpost, handlegetallpost, } = Useauth()
+  
+  
 
-  const { likeHandle, unlikeHandle, followHandle, unfollowHandle, saveHandle, unsaveHandle } = usePost()
+  const { likeHandle, unlikeHandle, followHandle, unfollowHandle, saveHandle, unsaveHandle,liker,saver,followbtn,post,setpost } = usePost()
 
   console.log(user)
   console.log(allpost)
@@ -39,8 +44,17 @@ const Home = () => {
   // }
 
   useEffect(() => {
-    handlegetallpost()
+    try{
+setloader(true)
+      handlegetallpost()
+    }finally{
+      setloader(false)
+    }
   }, [])
+
+
+ 
+
   const soundsytem = (id) => {
     if (play === id) {
       setplay(null)
@@ -66,6 +80,16 @@ const scrollLeft = () => {
     behavior: "smooth"
   })
 }
+
+if(loader){
+  return (
+    <div>
+      <Loadera/>
+    </div>
+  )
+}
+
+
   return (
     <>
 
@@ -117,7 +141,7 @@ const scrollLeft = () => {
   </div> */}
 
         {
-          allpost?.map((item) => {
+          post?.map((item) => {
             return (
               <section key={item._id} className='w-full text-xl capitalize font-semibold pb-6    flex flex-col gap-1'>
 
@@ -129,7 +153,7 @@ const scrollLeft = () => {
                     <p>{item.user.username}</p>
                   </div>
                   <button
-                    onClick={() => { item.isfollow ? unfollowHandle(item.user._id) : followHandle(item.user._id) }}
+                    onClick={() => followbtn(item.user._id,item.isfollow)}
 
                     className='px-3 py-1 text-sm border-2 active:scale-95 transition-all duration-200 ease-in-out capitalize border-amber-50 rounded-lg text-white'
                     style={{ display: user.id === item.user._id ? "none" : "block" }}
@@ -159,10 +183,7 @@ const scrollLeft = () => {
 
                     {/* Like Button */}
                     <div className='flex items-center cursor-pointer active:scale-95 transition-all'
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        item.islike ? unlikeHandle(item._id) : likeHandle(item._id)
-                      }}
+                      onClick={(e) =>liker(item._id,item.islike)}
                     >
                       {item.islike ? <FaHeart className='text-red-500' /> : <FaRegHeart />}
                       <p className='text-[12px] px-2'>
@@ -187,7 +208,11 @@ const scrollLeft = () => {
                     </div>
 
                   </div>
-                  {item.save ? <FaBookmark onClick={() => unsaveHandle(item._id)} /> : <FaRegBookmark onClick={() => saveHandle(item._id)} />}
+                  <div 
+                  onClick={()=>saver(item._id,item.save)}
+                  >
+                  {item.save ? <FaBookmark  /> : <FaRegBookmark />}
+                  </div>
                 </div>
 
                 <Caption item={item} expand={expand} toggle={toggle} />

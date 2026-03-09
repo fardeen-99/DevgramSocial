@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
-import { getallpost, Getme, Login, Register } from "./services/auth.api";
+import { getallpost, Getme } from "./services/auth.api"
+import { useLoader } from "../../../Loader.context";
 
 
 
@@ -12,68 +13,46 @@ export const Provider=({children})=>{
     const [loading, setloading] = useState(true)
     const [allpost,setallpost]=useState([])
 const [savepost,setsavepost]=useState([])
+const{setloader}=useLoader()
 
-    const fetchUser = async () => {
+
+   const fetchUser = async () => {
         try {
+            
             const res = await Getme();
             setuser(res.user);
         } catch (err) {
             setuser(null);
         } finally {
             setloading(false);
+            setloader(false)
         }
     };
- const handlegetallpost=async()=>{
+    const handlegetallpost = async () => {
 
-const res =await getallpost()
-console.log(res.final)
-setallpost(res.final)
+        try {
 
-}
-
-useEffect(() => {
-
-
-    fetchUser();
+            const res = await getallpost();
     
-}, []);
-
-
-const Loginhandle=async(form)=>{
-    try {
-        const res=await Login(form)
-      
-        setuser(res.user)
- console.log(res.user)
-        
-    } catch (error) {
-        console.log(error);
-        
-    }finally{
-        setloading(false)
+            console.log(res.final);
+            setallpost(res.final);
+        } catch (error) {
+            console.log(error);
+        } 
     }
 
-}
+    useEffect(() => {
+handlegetallpost()
 
-const RegisterHandle=async(form)=>{
-    try {
-        const res=await Register(form)
-      
-       setuser(res.user)
-      
-    } catch (error) {
-        console.log(error);
-        
-    }finally{
-        setloading(false)
-    }
-}
+        fetchUser();
+
+    }, []);
 
 
 
 
 return(
-    <Context.Provider  value={{RegisterHandle,Loginhandle,user,loading,allpost,setallpost,handlegetallpost,fetchUser,savepost,setsavepost}} >
+    <Context.Provider  value={{user,loading,allpost,setallpost,setuser,savepost,setsavepost,setloading,fetchUser,handlegetallpost}} >
         {children}
     </Context.Provider>
 )

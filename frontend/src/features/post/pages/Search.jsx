@@ -3,23 +3,33 @@ import { useEffect, useState } from "react";
 import { usePost } from "../hooks/post.hook";
 import { Useauth } from "../../auth/hooks/auth.hook";
 import { useNavigate } from "react-router-dom";
+import Loadera from "../../../../Loader";
+import { useLoader } from "../../../../Loader.context";
 
 const Search = () => {
-  const { storyHandle, story, followHandle, unfollowHandle } = usePost();
+  const { storyHandle, story, followHandle, unfollowHandle,followbtn } = usePost();
   const { fetchUser, user } = Useauth();
   const navigate = useNavigate();
 
   useEffect(() => {
     storyHandle();
-    fetchUser();
+    // fetchUser();
+    // console.log(user)
   }, []);
+
+  const {setloader}=useLoader()
+
 
   const [search, setSearch] = useState("");
   const [focused, setFocused] = useState(false);
 
-  const filterstory = story.filter((item) =>
+  const filterstory = story?.filter((item) =>
     item.username.toLowerCase().includes(search.toLowerCase())
   );
+
+if(!user){
+  return setloader(true)
+}
 
   return (
     <div className="min-h-screen w-full bg-[#0c0c0e] px-4 py-6">
@@ -74,17 +84,17 @@ const Search = () => {
       </div>
 
       {/* ── Result count pill ── */}
-      {search && filterstory.length > 0 && (
+      {search && filterstory?.length > 0 && (
         <p className="text-zinc-500 text-xs mb-3 px-1">
-          {filterstory.length} result{filterstory.length !== 1 ? "s" : ""} for{" "}
+          {filterstory?.length} result{filterstory?.length !== 1 ? "s" : ""} for{" "}
           <span className="text-indigo-400 font-medium">"{search}"</span>
         </p>
       )}
 
       {/* ── Results List ── */}
-      {filterstory.length > 0 ? (
+      {filterstory?.length > 0 ? (
         <div className="flex flex-col gap-2">
-          {filterstory.map((item, index) => (
+          {filterstory?.map((item, index) => (
             <div
               key={item._id}
               className="group flex items-center justify-between gap-3 bg-[#18181b] hover:bg-[#1f1f24] border border-[#27272a] hover:border-[#3f3f46] rounded-2xl px-4 py-3 transition-all duration-200"
@@ -131,7 +141,7 @@ const Search = () => {
               </div>
 
               {/* ── Follow / Following Button ── */}
-              {item._id !== user.id && (
+              {item._id !== user?.id && (
                 <button
                   onClick={() =>
                     item.isfollowing

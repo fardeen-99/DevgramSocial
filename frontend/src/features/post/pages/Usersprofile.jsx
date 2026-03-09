@@ -8,9 +8,10 @@ import Tag from "./Tag";
 const Usersprofile = () => {
 const [tab,settab]=useState("post")
     const {id}=useParams()
-const{userpersonalprofile,personprofileHandle,followHandle,unfollowHandle}=usePost()
+const{userpersonalprofile,setuserpersonalprofile,personprofileHandle,followHandle,unfollowHandle}=usePost()
 
 useEffect(() => {
+   // clear old profile
     personprofileHandle(id)
 }, [])
 console.log(userpersonalprofile)

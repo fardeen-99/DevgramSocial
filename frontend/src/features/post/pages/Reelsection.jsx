@@ -7,12 +7,14 @@ import { useNavigate } from "react-router-dom";
 const Reelsection = () => {
   
   const { user, allpost, handlegetallpost } = Useauth()
-  const { likeHandle, unlikeHandle, followHandle, unfollowHandle, saveHandle, unsaveHandle } = usePost()
+  const { likeHandle, unlikeHandle, followHandle, unfollowHandle, saveHandle, unsaveHandle,post,setpost,liker,saver,followbtn } = usePost()
   const [expand, setexpand] = useState(null)
   const [play, setplay] = useState(null)
   const [sound, setsound] = useState(null)
   const [captionexpand, setcaptionexpand] = useState(null)
   const navigate = useNavigate()
+
+
 
 
   const videoRefs = useRef({})
@@ -24,7 +26,7 @@ const Reelsection = () => {
   const toggle = (id) => {
     setexpand((prev) => prev === id ? null : id)
   }
-
+const [reel,setreel]=useState(allpost || [])
 
 // Intersection Observer Logic
   useEffect(() => {
@@ -90,8 +92,12 @@ const Reelsection = () => {
   useEffect(() => {
     handlegetallpost()
   }, [])
-  console.log(user)
-  console.log(allpost)
+
+
+
+
+  // console.log(user)
+  // console.log(allpost)
   const soundsytem = (id) => {
     if (play === id) {
       setplay(null)
@@ -106,7 +112,7 @@ const Reelsection = () => {
     <div className="w-full max-w-100 m-auto 2xl:max-w-200 h-screen  overflow-y-scroll snap-y snap-mandatory scroll-smooth flex flex-col relative">
 
       {
-        allpost?.filter((post) => post.mediatype === "non-image").map((item) => {
+        post?.filter((poster) => poster.mediatype === "non-image").map((item) => {
           return (
             <section
               key={item._id}
@@ -122,9 +128,7 @@ const Reelsection = () => {
                 <button
                   onClick={(e) => {
                     e.stopPropagation()
-                    item.isfollow
-                    ? unfollowHandle(item.user._id)
-                    : followHandle(item.user._id)
+                   followbtn(item.user._id,item.isfollow)
                   }}
                   className={`${item.user.username === user.username ? "hidden" : ""} px-3 py-1 text-sm border-2 active:scale-95 cursor-pointer transition-all duration-200 ease-in-out capitalize border-amber-50 rounded-lg text-white`}
                   >
@@ -179,11 +183,7 @@ const Reelsection = () => {
                   {/* Like */}
                   <div
                     className='flex flex-col gap-1 items-center cursor-pointer active:scale-95 transition-all'
-                    onClick={() => {
-                      item.islike
-                        ? unlikeHandle(item._id)
-                        : likeHandle(item._id)
-                    }}
+                    onClick={() => liker(item._id,item.islike)}
                   >
                     {item.islike
                       ? <FaHeart className='text-red-500' />
@@ -218,7 +218,10 @@ const Reelsection = () => {
                   <div className="flex flex-col gap-5 items-center">
 
                     <svg aria-label="Share" className="x1lliihq x1n2onr6 xyb1xck cursor-pointer active:scale-95 transition-all" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>Share</title><path d="M13.973 20.046 21.77 6.928C22.8 5.195 21.55 3 19.535 3H4.466C2.138 3 .984 5.825 2.646 7.456l4.842 4.752 1.723 7.121c.548 2.266 3.571 2.721 4.762.717Z" fill="none" stroke="currentColor" strokeLinejoin="round" strokeWidth="2"></path><line fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" x1="7.488" x2="15.515" y1="12.208" y2="7.641"></line></svg>
-                    {item.save ? <FaBookmark className="cursor-pointer active:scale-95 transition-all" onClick={() => unsaveHandle(item._id)} /> : <FaRegBookmark className="cursor-pointer active:scale-95 transition-all" onClick={() => saveHandle(item._id)} />}
+                    <div onClick={() => saver(item._id,item.save)}>
+
+                    {item.save ? <FaBookmark className="cursor-pointer active:scale-95 transition-all" /> : <FaRegBookmark className="cursor-pointer active:scale-95 transition-all"/>}
+                    </div>
                     <svg aria-label="More" className="x1lliihq x1n2onr6 xyb1xck cursor-pointer active:scale-95 transition-all" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>More</title><circle cx="12" cy="12" r="1.5"></circle><circle cx="6" cy="12" r="1.5"></circle><circle cx="18" cy="12" r="1.5"></circle></svg>
                   </div>
                 </div>

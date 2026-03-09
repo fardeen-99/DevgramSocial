@@ -43,8 +43,8 @@ setstop(true)
     formset.append("caption", caption)
 
     await uploadHandle(formset)
-setstop(false)
     navigate("/")
+setstop(false)
   }
 
   return (

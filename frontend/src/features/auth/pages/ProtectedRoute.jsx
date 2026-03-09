@@ -1,16 +1,19 @@
 import React from 'react'
+import {Atom} from 'react-loading-indicators'
 import { Useauth } from '../hooks/auth.hook'
 import { Navigate } from 'react-router-dom'
+import { useLoader } from '../../../../Loader.context'
 
 const ProtectedRoute = ({children}) => {
 
 
-const {loading,user}=Useauth()
+const {user,loading}=Useauth()
+const {loader}=useLoader()
 
 if(loading){
-    return <div className="flex items-center justify-center h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
-    </div>
+    return   <div className="fixed inset-0 z-50 bg-black/70  flex items-center justify-center">
+    <Atom color="#1418b9" size="medium" />
+  </div>
 }
 
 if(!user){

@@ -6,13 +6,13 @@ import { useNavigate } from 'react-router-dom'
 
 const Save = () => {
   const navigate = useNavigate()
-  const { setallpost, allpost, handlegetallpost, savepost } = Useauth()
+  // const { setallpost, allpost, handlegetallpost, savepost } = Useauth()
 
-  const { unsaveHandle } = usePost()
+  const { post,saver } = usePost()
 
-  useEffect(() => {
-    handlegetallpost()
-  }, [])
+  // useEffect(() => {
+  //   handlegetallpost()
+  // }, [])
 
 
   return (
@@ -20,9 +20,9 @@ const Save = () => {
       <h1 className='text-6xl px-5 text-center md:text-start font-semibold text-white mb-7'>Saved Post</h1>
       <div className=' md:w-full max-w-300 grid-cols-2 xl:grid-cols-4 md:grid-cols-3 grid m-auto gap-1 md:p-4'>
         {
-          allpost.filter(item => item.save === true).length > 0 ? (
+          post.filter(item => item.save === true).length > 0 ? (
 
-            allpost
+            post
               .filter(item => item.save === true)
               .map((item) => (
                 <section className='relative ' key={item._id}>
@@ -50,7 +50,7 @@ const Save = () => {
                   }
 
                   <FaBookmark
-                    onClick={() => unsaveHandle(item._id)}
+                    onClick={() => saver(item._id,item.save)}
                     className='absolute top-3 text-white text-3xl right-2'
                   />
 
