@@ -43,14 +43,24 @@ const {setloader,loader}=useLoader()
   // navigate("/register")
   // }
 
-  useEffect(() => {
-    try{
-setloader(true)
-      handlegetallpost()
-    }finally{
+useEffect(() => {
+
+  const loadHome = async () => {
+    try {
+      setloader(true)
+
+      await handlegetallpost()
+
+    } catch (error) {
+      console.log(error)
+    } finally {
       setloader(false)
     }
-  }, [])
+  }
+
+  loadHome()
+
+}, [])
 
 
  

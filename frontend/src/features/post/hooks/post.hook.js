@@ -21,42 +21,53 @@ const {setloader}=useLoader()
         // await handlegetallpost()
     }
     const followHandle = async (id) => {
-        const res = await folllow(id)
-        // await handlegetallpost()
-        await personprofileHandle(id,false)
-        await storyHandle()
+
+      await  Promise.all([
+             folllow(id)
+            // await handlegetallpost()
+            , personprofileHandle(id,false)
+            ,storyHandle()
+            
+        ])
     }
     const unfollowHandle = async (id) => {
-        const res = await unfolllow(id)
-        // await handlegetallpost()
-        await personprofileHandle(id,false)
-        await storyHandle()
+      await   Promise.all([
+
+            unfolllow(id)
+          //  handlegetallpost()
+           ,personprofileHandle(id,false)
+           ,storyHandle()
+        ])
     }
     const uploadHandle = async (formset) => {
         try{
             setloader(true)
-            const res = await upload(formset)
-            await handlegetallpost()
+           await Promise.all([ upload(formset),
+                 handlegetallpost()
+            ])
         }finally{
             setloader(false)
         }
     }
     const saveHandle = async (id) => {
 
-        const res = await save(id)
-        await handlegetallpost()
+      await  Promise.all([  save(id)
+        ,handlegetallpost()
+        ])
 
     }
     const unsaveHandle = async (id) => {
 
-        const res = await unsave(id)
-        await handlegetallpost()
+        await Promise.all([ unsave(id)
+        , handlegetallpost()])
 
     }
 
-    const detailpostHandle = async (id) => {
+    const detailpostHandle = async (id,load=true) => {
         try{
-            setloader(true)
+            if(load){
+                setloader(true)
+            }
             const res = await detailposting(id)
             setSinglepost(res.detailpost)
             console.log(res.detailpost)
@@ -65,15 +76,15 @@ const {setloader}=useLoader()
         }
     }
     const commentHandle=async(id,comment)=>{
-        const res=await commentposting(id,comment)
-        await detailpostHandle(id)
+        const res=await Promise.all([ commentposting(id,comment)
+        ,detailpostHandle(id,false)])
        
     }
 
 
     const updateHandle=async(id,formset)=>{
-        const res=await update(id,formset)
-        await handlegetallpost()
+        const res=await Promise.all([ update(id,formset),
+         handlegetallpost()])
     }
     const storyHandle=async()=>{
         const res=await storiya()

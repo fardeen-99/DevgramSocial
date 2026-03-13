@@ -18,9 +18,14 @@ const DetailPost = () => {
   const { detailpostHandle, singlepost, commentHandle } = usePost()
   const { handlegetallpost } = Useauth()
 
+
   const singlepostHandle = async () => {
-    const res = await detailpostHandle(id)
+    const res = await detailpostHandle(id)  
   }
+
+  // console.log(commentpost)
+
+
   useEffect(() => {
     singlepostHandle()
 
