@@ -7,7 +7,7 @@ const ImageKit = require("@imagekit/nodejs")
 const { toFile } = require("@imagekit/nodejs")
 const redis = require("../config/Cache")
 const image = new ImageKit({
-  privateKey: "private_8xoNZmFx5vHtoHsbTFvyTqNIdQQ="
+  privateKey: process.env.IMAGEKIT_PRIVATE_KEY
 })
 
 

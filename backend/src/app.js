@@ -1,7 +1,11 @@
 require("dotenv").config()
+
+
+
 const express=require("express")
 const authRouter=require("./routes/auth.routes")
 const postRouter=require("./routes/post.routes")
+const HandleError=require("./middlewares/error.middleware")
 const UserFollowRouter=require("./routes/user.routes")
 const feedbackRouter=require("./routes/feedback.routes")
 const cookie=require("cookie-parser")
@@ -25,5 +29,12 @@ const path=require("path")
 app.get("*Name",(req,res)=>{
     res.sendFile(path.join(__dirname,"..","/public/index.html"))
 })
+
+
+
+
+
+app.use(HandleError)
+
 
 module.exports=app

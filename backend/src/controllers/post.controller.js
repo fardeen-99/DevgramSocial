@@ -7,7 +7,7 @@ const CommentModel = require("../models/comment.model")
 const savemodel = require('../models/save.model')
 const { toFile } = require("@imagekit/nodejs")
 const image = new ImageKit({
-    privateKey: "private_8xoNZmFx5vHtoHsbTFvyTqNIdQQ="
+    privateKey:process.env.IMAGEKIT_PRIVATE_KEY
 })
 
 const PostRoute = async (req, res) => {
@@ -29,12 +29,12 @@ const PostRoute = async (req, res) => {
         folder: "insta-clone-final"
     })
 
-    const posts = await postModel.create({
-        caption: req.body.caption,
-        post_url: userpost.url,
-        mediatype: userpost.fileType,
-        user: req.user.id
-    })
+        const posts = await postModel.create({
+            caption: req.body.caption,
+            post_url: userpost.url,
+            mediatype: userpost.fileType,
+            user: req.user.id
+        })
 
     console.log(userpost)
 
