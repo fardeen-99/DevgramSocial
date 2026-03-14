@@ -98,11 +98,7 @@ const submiter = async (e) => {
         fontFamily: "'Georgia', serif",
       }}
     >
-<div
-onClick={()=>navigate(-1)}
-className="h-10 w-10 flex items-center absolute top-1 z-999 left-2 justify-center bg-red-600 rounded-full text-white font-bold">
-  x
-</div>
+
 
       {/* Ambient grain overlay */}
       <div
@@ -299,10 +295,10 @@ className="h-10 w-10 flex items-center absolute top-1 z-999 left-2 justify-cente
                 background: submitted
                   ? "linear-gradient(135deg, #16a34a, #15803d)"
                   : "linear-gradient(135deg, #f59e0b, #d97706)",
-                color: "#1a0a00",
-                boxShadow: submitted 
-                  ? "0 8px 30px rgba(22,163,74,0.4)"
-                  : "0 8px 30px rgba(251,191,36,0.4)",
+                color: "#ffff",
+                // boxShadow: submitted 
+                //   ? "0 8px 30px rgba(22,163,74,0.4)"
+                //   : "0 8px 30px rgba(251,191,36,0.4)",
                 transform: "scale(1)",
                 letterSpacing: "0.5px",
               }}
@@ -313,7 +309,7 @@ className="h-10 w-10 flex items-center absolute top-1 z-999 left-2 justify-cente
                 <span >✓ Thank you so much! 🎉</span>
               ) : (
                 <span >
-                   Feedback And Support 💗
+                   Feedback And Support
                 </span>
               )}
             </button>

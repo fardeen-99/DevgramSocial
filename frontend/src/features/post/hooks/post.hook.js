@@ -1,6 +1,6 @@
 import { useContext, useEffect } from "react"
 import { Context } from "../post.context"
-import { commentposting, detailposting, feedback, folllow, like, personprofile, save, storiya, unfolllow, unlike, unsave, update, upload } from "../services/post.api"
+import { commentposting, deletepost, detailposting, feedback, folllow, like, personprofile, save, storiya, unfolllow, unlike, unsave, update, upload } from "../services/post.api"
 import { Useauth } from "../../auth/hooks/auth.hook"
 import { useLoader } from "../../../../Loader.context"
 
@@ -41,10 +41,10 @@ const {setloader}=useLoader()
     }
     const uploadHandle = async (formset) => {
         try{
-            setloader(true)
-           await Promise.all([ upload(formset),
-                 handlegetallpost()
-            ])
+      setloader(true)
+          const res=await Promise.all([upload(formset),handlegetallpost(false)])
+      setpost(prev=>[res.response,...prev])
+      
         }finally{
             setloader(false)
         }
@@ -52,14 +52,15 @@ const {setloader}=useLoader()
     const saveHandle = async (id) => {
 
       await  Promise.all([  save(id)
-        ,handlegetallpost()
+        // ,handlegetallpost()
         ])
 
     }
     const unsaveHandle = async (id) => {
 
         await Promise.all([ unsave(id)
-        , handlegetallpost()])
+        // , handlegetallpost()
+        ])
 
     }
 
@@ -111,7 +112,19 @@ const HandleFeedBack=async(name,message)=>{
   console.log(res)
 }
 
+const deletepostHandle = async (id) => {
 
+  setpost(prev => prev.filter(item => item._id !== id))
+
+  try{
+    await deletepost(id)
+    await handlegetallpost(false)
+    
+  }catch(err){
+    console.log(err)
+  }
+
+}
 
 
     const liker = (id,islike)=>{
@@ -179,7 +192,7 @@ useEffect(() => {
     setpost(allpost)
   }, [allpost])
 
-    return ({ likeHandle, unlikeHandle, followHandle, unfollowHandle, uploadHandle, saveHandle, unsaveHandle, detailpostHandle, setSinglepost, singlepost,commentHandle,updateHandle,storyHandle,story,setStory,personprofileHandle,userpersonalprofile,setuserpersonalprofile,HandleFeedBack,saver,liker,post,setpost,followbtn })
+    return ({ likeHandle, unlikeHandle, followHandle, unfollowHandle, uploadHandle, saveHandle, unsaveHandle, detailpostHandle, setSinglepost, singlepost,commentHandle,updateHandle,storyHandle,story,setStory,personprofileHandle,userpersonalprofile,setuserpersonalprofile,HandleFeedBack,saver,liker,post,setpost,followbtn,deletepostHandle })
 
 
 }

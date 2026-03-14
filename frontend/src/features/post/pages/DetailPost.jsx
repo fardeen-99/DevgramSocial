@@ -9,6 +9,7 @@ import { RiShareForwardLine } from "react-icons/ri";
 import { FaRegBookmark } from "react-icons/fa";
 import { FaBookmark } from "react-icons/fa";
 import { Useauth } from '../../auth/hooks/auth.hook';
+import DeleteToggle from '../../auth/components/DeleteToggle';
 const DetailPost = () => {
 
   const [sound, setSound] = useState(null)
@@ -16,7 +17,8 @@ const DetailPost = () => {
   const { id } = useParams()
   console.log(id)
   const { detailpostHandle, singlepost, commentHandle } = usePost()
-  const { handlegetallpost } = Useauth()
+  const { handlegetallpost,user } = Useauth()
+  const [stop,setstop]=useState(false)
 
 
   const singlepostHandle = async () => {
@@ -36,9 +38,11 @@ const DetailPost = () => {
   }
 
   const submitcomment = async (e) => {
+    setstop(true)
     e.preventDefault()
     console.log(id, comment)
     const res = await commentHandle(id, comment)
+    setstop(false)
     setComment("")
   }
   return (
@@ -46,11 +50,19 @@ const DetailPost = () => {
       {singlepost?.post_url && (
         <>
           <div className=' w-full h-full flex flex-col md:w-[60%] bg-[#0C1014] ' key={singlepost._id}  >
+<div className='flex justify-between items-center'>
 
             <div className='flex gap-4 items-start p-3 shrink-0'>
               <img src={singlepost.user.profile_image} className='h-10 w-10 rounded-full' alt="" />
               <p className='text-white text-2xl' >{singlepost.user.username}</p>
+
+            
             </div>
+            
+            <DeleteToggle
+            
+            item={singlepost} user={user}/>
+</div>
             <div className='flex-1 min-h-0'>
               {
                 singlepost.mediatype === "image" ? (
@@ -119,7 +131,7 @@ const DetailPost = () => {
                 <input type="text"
                 required
                 placeholder='Add comment' className='w-full border px-3 border-gray-300 outline-none py-3  rounded-xl' value={comment} onChange={(e) => setComment(e.target.value)} />
-                <button className='rounded-xl bg-yellow-600 px-6 py-3'>Post</button>
+                <button className={stop?'rounded-xl bg-yellow-600/50 px-6 py-3 cursor-not-allowed':'rounded-xl bg-yellow-600 px-6 py-3 cursor-pointer'}>Post</button>
               </form>
             </div>
           </div>

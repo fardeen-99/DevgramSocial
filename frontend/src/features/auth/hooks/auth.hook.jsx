@@ -5,7 +5,7 @@ import { useLoader } from "../../../../Loader.context"
 
 export const Useauth = () => {
     // const { setloader } = useLoader()
-    const { user, setuser, allpost, setallpost, savepost, setsavepost, loading, setloading,fetchUser,handlegetallpost} = useContext(Context)
+    const { user, setuser, allpost, setallpost, savepost, setsavepost, loading, setloading,fetchUser,handlegetallpost,showDelete,setShowDelete} = useContext(Context)
 
  
 
@@ -40,10 +40,12 @@ export const Useauth = () => {
         }
     }
 
-
+const deleteToggle=(id)=>{
+  setShowDelete((prev) => prev === id ? null : id)
+}
     
 
-    return { RegisterHandle, handlegetallpost, Loginhandle, fetchUser, user, setuser, allpost, setallpost, savepost, setsavepost, loading}
+    return { RegisterHandle, handlegetallpost, Loginhandle, fetchUser, user, setuser, allpost, setallpost, savepost, setsavepost, loading,deleteToggle,showDelete,setShowDelete}
 
 
 }

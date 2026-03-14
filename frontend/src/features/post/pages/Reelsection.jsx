@@ -89,9 +89,9 @@ const [reel,setreel]=useState(allpost || [])
   }
 
 
-  useEffect(() => {
-    handlegetallpost()
-  }, [])
+  // useEffect(() => {
+  //   handlegetallpost(false)
+  // }, [])
 
 
 
@@ -123,7 +123,19 @@ const [reel,setreel]=useState(allpost || [])
               <div className='flex pt-3 px-2 pb-2 w-full flex-col absolute md:bottom-3 bottom-16 z-99 gap-2 text-white'>
                 <div className='flex gap-2 items-center cursor-pointer transition-all'>
                   <img className='h-8 rounded-full w-8 shrink-0 object-cover' src={item.user.profile_image} alt="" />
-                  <p>{item.user.username}</p>
+                  <p
+                  className="cursor-pointer"
+                  onClick={()=>{
+                    console.log(item)
+                    // console.log(user.id)
+                    {
+                      item.user._id === user.id?
+                      navigate("/profile")
+                    :
+                      navigate(`/personprofile/${item.user._id}`)
+                    }
+                  }}
+                  >{item.user.username}</p>
 
                 <button
                   onClick={(e) => {

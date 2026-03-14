@@ -2,7 +2,7 @@ const express=require("express")
 const multer=require("multer")
 const IdentifyToken=require("../middlewares/auth.middleware")
 const upload=multer({storage:multer.memoryStorage()})
-const {PostRoute,GetPost,GetDetailPost,LikePost,Comment,unLikePost,saver,unsaver}=require("../controllers/post.controller")
+const {PostRoute,GetPost,GetDetailPost,LikePost,Comment,unLikePost,saver,unsaver,deletePost}=require("../controllers/post.controller")
 
 const postRouter=express.Router()
 
@@ -14,6 +14,7 @@ postRouter.post("/unlike/:id",IdentifyToken,unLikePost)
 postRouter.post("/comment/:id",IdentifyToken,Comment)
 postRouter.post("/save/:id",IdentifyToken,saver)
 postRouter.post("/unsave/:id",IdentifyToken,unsaver)
+postRouter.delete("/delete/:id",IdentifyToken,deletePost)
 
 
 module.exports=postRouter

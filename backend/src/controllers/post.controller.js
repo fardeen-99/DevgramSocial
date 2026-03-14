@@ -36,12 +36,33 @@ const PostRoute = async (req, res) => {
             user: req.user.id
         })
 
+        const response=await postModel.findById(posts._id).populate("user","-password").lean()
+
+        const likecount=await likemodel.countDocuments({post:posts._id})
+        response.likecount=likecount
+
+     
+
+        const commentcount=await CommentModel.countDocuments({post:posts._id})
+        response.commentcount=commentcount
+
+        const islike=await likemodel.findOne({post:posts._id,user:req.user.id})
+        response.islike=!!islike
+
+        const isfollow=await followmodel.findOne({follower:req.user.id,followee:posts.user})
+        response.isfollow=!!isfollow
+
+        const save=await savemodel.findOne({post:posts._id,user:req.user.id})
+        response.save=!!save
+
+
+
     console.log(userpost)
 
 
     res.status(200).json({
         message: "post created succesfully"
-        , posts
+        , response
     })
 
 }
@@ -298,4 +319,20 @@ const unsaver = async (req, res) => {
     })
 }
 
-module.exports = { PostRoute, GetPost, GetDetailPost, LikePost, Comment, unLikePost, saver, unsaver }
+
+const deletePost=async(req,res)=>{
+    const id=req.params.id
+    const post=await postModel.findById(id)
+    if(!post){
+        return res.status(404).json({
+            message:"post not found"
+        })
+    }
+    const response=await postModel.findByIdAndDelete(id)
+    res.status(200).json({
+        message:"post deleted successfully",
+        response
+    })
+}
+
+module.exports = { PostRoute, GetPost, GetDetailPost, LikePost, Comment, unLikePost, saver, unsaver,deletePost }

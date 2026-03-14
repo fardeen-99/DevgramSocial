@@ -10,7 +10,7 @@ const Applayout = () => {
 
 <>
     <div className='h-full w-full flex'>
-<div className='w-60 left-[-100%] hidden md:block overflow-y-hidden h-full fixed md:static bg-[#0C1014] '>
+<div className='w-60 hidden md:block z-999 overflow-y-hidden h-full fixed md:static bg-[#0C1014] '>
    <Aside/>
 </div>
 <div

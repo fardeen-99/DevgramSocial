@@ -16,6 +16,7 @@ import { GoPlus } from "react-icons/go";
 import Caption from '../../post/components/Caption';
 import { useLoader } from '../../../../Loader.context';
 import Loadera from '../../../../Loader';
+import DeleteToggle from '../components/DeleteToggle';
 
 
 const Home = () => {
@@ -23,17 +24,22 @@ const Home = () => {
   const [expand, setexpand] = useState(null)
   const [play, setplay] = useState(null)
   const [sound, setsound] = useState(null)
+
   const navigate = useNavigate()
 
   const toggle = (id) => {
     setexpand((prev) => prev === id ? null : id)
   }
+
+
+
+
 const {setloader,loader}=useLoader()
   const { user, allpost, handlegetallpost, } = Useauth()
   
   
 
-  const { likeHandle, unlikeHandle, followHandle, unfollowHandle, saveHandle, unsaveHandle,liker,saver,followbtn,post,setpost } = usePost()
+  const { likeHandle, unlikeHandle, followHandle, unfollowHandle, saveHandle, unsaveHandle,liker,saver,followbtn,post,setpost,deletepostHandle } = usePost()
 
   console.log(user)
   console.log(allpost)
@@ -43,26 +49,30 @@ const {setloader,loader}=useLoader()
   // navigate("/register")
   // }
 
-useEffect(() => {
+// useEffect(() => {
 
-  const loadHome = async () => {
-    try {
-      setloader(true)
+//   const loadHome = async () => {
+//     try {
+  
 
-      await handlegetallpost()
+//       await handlegetallpost()
 
-    } catch (error) {
-      console.log(error)
-    } finally {
-      setloader(false)
-    }
-  }
+//     } catch (error) {
+//       console.log(error)
+//     } finally {
+//       setloader(false)
+//     }
+//   }
 
-  loadHome()
+//   loadHome()
 
-}, [])
+// }, [])
 
-
+          useEffect(() => {
+            if(post.length===0){
+              handlegetallpost(false)
+            }
+          }, [])
  
 
   const soundsytem = (id) => {
@@ -156,7 +166,7 @@ if(loader){
               <section key={item._id} className='w-full text-xl capitalize font-semibold pb-6    flex flex-col gap-1'>
 
                 <div className='flex pt-3 px-2 pb-2 w-full justify-between items-center text-white'>
-                  <div className='flex gap-2 items-center '
+                  <div className='flex gap-2 items-center cursor-pointer '
                   onClick={()=>navigate(`/personprofile/${item.user._id}`)}
                   >
                     <img className='h-8 rounded-full w-8 shrink-0 ' src={item.user.profile_image} alt="" />
@@ -168,6 +178,8 @@ if(loader){
                     className='px-3 py-1 text-sm border-2 active:scale-95 transition-all duration-200 ease-in-out capitalize border-amber-50 rounded-lg text-white'
                     style={{ display: user.id === item.user._id ? "none" : "block" }}
                   >{item.isfollow ? "following" : "follow"}</button>
+
+<DeleteToggle item={item} user={user}/>
                 </div>
                 <div className='flex flex-col w-full gap-2 h-130 text-white relative'
 

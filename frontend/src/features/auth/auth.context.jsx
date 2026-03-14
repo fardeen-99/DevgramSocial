@@ -13,6 +13,8 @@ export const Provider=({children})=>{
     const [loading, setloading] = useState(true)
     const [allpost,setallpost]=useState([])
 const [savepost,setsavepost]=useState([])
+  const [showDelete, setShowDelete] = useState(false)
+
 const{setloader}=useLoader()
 
 
@@ -28,17 +30,21 @@ const{setloader}=useLoader()
             setloader(false)
         }
     };
-    const handlegetallpost = async () => {
-
+    const handlegetallpost = async (load=true) => {
         try {
-
+            if(load){
+                setloader(true)
+            }
+        
             const res = await getallpost();
     
             console.log(res.final);
             setallpost(res.final);
         } catch (error) {
             console.log(error);
-        } 
+        } finally {
+            setloader(false)
+        }
     }
 
     useEffect(() => {
@@ -52,7 +58,7 @@ handlegetallpost()
 
 
 return(
-    <Context.Provider  value={{user,loading,allpost,setallpost,setuser,savepost,setsavepost,setloading,fetchUser,handlegetallpost}} >
+    <Context.Provider  value={{user,loading,allpost,setallpost,setuser,savepost,setsavepost,setloading,fetchUser,handlegetallpost,showDelete,setShowDelete}} >
         {children}
     </Context.Provider>
 )

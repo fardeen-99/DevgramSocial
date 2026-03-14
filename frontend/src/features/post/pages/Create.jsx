@@ -43,8 +43,8 @@ setstop(true)
     formset.append("caption", caption)
 
     await uploadHandle(formset)
+    setstop(false)
     navigate("/")
-setstop(false)
   }
 
   return (
@@ -144,12 +144,12 @@ setstop(false)
         </div>
 
         {/* BUTTON */}
-        {stop && <p className='text-white text-sm font-semibold tracking-widest uppercase'>Uploading...</p>}
+        {/* {stop && <p className='text-white text-sm font-semibold tracking-widest uppercase'>Uploading...</p>} */}
         <button
-          className='w-[90%] m-auto py-3 active:scale-90 rounded-xl font-bold text-sm tracking-widest uppercase bg-blue-600 text-white'
+          className={stop?"w-[90%] m-auto py-3 active:scale-90 rounded-xl font-bold text-sm tracking-widest uppercase bg-blue-600/50 text-white cursor-not-allowed":"w-[90%] m-auto py-3 active:scale-90 rounded-xl font-bold text-sm tracking-widest uppercase bg-blue-600 text-white cursor-pointer"}
           disabled={stop}
         >
-          Upload Post
+          {stop?"Uploading...":"Upload Post"}
         </button>
 
       </form>

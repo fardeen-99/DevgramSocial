@@ -2,7 +2,7 @@ const express=require("express")
 const IdentifyToken=require("../middlewares/auth.middleware")
 const multer=require("multer")
 
-// const { AuthValidation } = require("../validation/auth.validation")
+const { AuthValidation } = require("../validation/auth.validation")
 // const {body,validationResult}=require("express-validator")
 // import {AuthValidation} from "../validation/auth.validation.js"
 
@@ -10,7 +10,7 @@ const upload=multer({storage:multer.memoryStorage()})
 const authRouter=express.Router()
 const {Register,Login,Logout,Getme,Update}=require("../controllers/user.controller")
 
-authRouter.post("/register",upload.single("file"),Register)
+authRouter.post("/register",upload.single("file"),AuthValidation,Register)
 authRouter.post("/login",upload.single("file"),Login)
 authRouter.post("/logout",Logout)
 authRouter.get("/get-me",IdentifyToken,Getme)

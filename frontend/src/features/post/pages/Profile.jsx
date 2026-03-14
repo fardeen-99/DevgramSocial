@@ -29,7 +29,7 @@ useEffect(()=>{
 
 
 fetchUser()
-handlegetallpost()
+// handlegetallpost(false)
 
 },[])
 

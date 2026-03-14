@@ -62,3 +62,7 @@ export const feedback=async(name,message)=>{
    const res= await api.post("/feedback",{name,feedback:message})
    return res.data
 }
+export const deletepost=async(id)=>{
+    const res=await api.delete(`/post/delete/${id}`)
+    return res.data
+}
