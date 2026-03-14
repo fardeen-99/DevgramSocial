@@ -1,11 +1,17 @@
 import React, { useRef, useState } from 'react'
 import { usePost } from '../hooks/post.hook'
 import { useNavigate } from 'react-router-dom'
+import { useLoader } from '../../../../Loader.context'
 
 const Create = () => {
 
+const yourmood=["funny","sad","neutral","surprised"]
+
+const [mood,setmood]=useState("neutral")
+
   const { uploadHandle } = usePost()
   const refu = useRef()
+  const {loader,setloader}=useLoader()
   const navigate = useNavigate()
 const [stop,setstop]=useState(false)
   const [file, setfile] = useState(null)
@@ -35,16 +41,20 @@ const [stop,setstop]=useState(false)
   }
 
   const submitUpload = async (e) => {
-setstop(true)
+// setstop(true)
+setloader(true)
     e.preventDefault()
 
     const formset = new FormData()
     formset.append("file", file)
     formset.append("caption", caption)
+    formset.append("mood", mood)
+
 
     await uploadHandle(formset)
-    setstop(false)
-    navigate("/")
+    
+    // setstop(false)
+  
   }
 
   return (
@@ -87,6 +97,8 @@ setstop(true)
                   autoPlay
                   className='h-60 w-full object-contain rounded-lg'
                 />
+                 
+
               )}
 
               <span className='text-white/40 text-xs uppercase'>
@@ -125,6 +137,25 @@ setstop(true)
             accept="image/*,video/*"
           />
 
+          {/* mood */}
+{fileType==="video" && (
+  <div className='flex flex-wrap gap-2'>
+                    {yourmood.map((item,index)=>{
+                      return(
+                        <button
+                        key={index}
+
+                        onClick={(e)=>{
+                          e.preventDefault()
+                          setmood(item)}}
+                        className={mood===item?'bg-yellow-600 cursor-pointer capitalize text-white px-4 py-2 rounded-xl':'bg-blue-400/50 cursor-pointer capitalize text-white px-4 py-2 rounded-xl'}
+                        >
+                          {item}
+                        </button>
+                      )
+                    })}
+                  </div>
+)}
           {/* CAPTION */}
           <div className='w-full flex flex-col gap-2'>
             <label className='text-xs font-semibold tracking-widest uppercase text-blue-300'>

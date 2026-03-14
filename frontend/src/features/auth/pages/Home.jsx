@@ -35,7 +35,7 @@ const Home = () => {
 
 
 const {setloader,loader}=useLoader()
-  const { user, allpost, handlegetallpost, } = Useauth()
+  const { user, allpost, handlegetallpost,fetchUser, } = Useauth()
   
   
 
@@ -68,12 +68,17 @@ const {setloader,loader}=useLoader()
 
 // }, [])
 
+useEffect(()=>{
+  fetchUser()
+},[])
+
           useEffect(() => {
-            if(post.length===0){
+            
               handlegetallpost(false)
-            }
+            
           }, [])
  
+
 
   const soundsytem = (id) => {
     if (play === id) {
@@ -131,9 +136,9 @@ if(loader){
         <div className='flex  flex-col gap-1 relative shrink-0 '
         onClick={()=>navigate(`/profile`)}
         >
-          <img src={user.profile_image} className='shrink-0 ml-1 h-20 w-20 object-cover rounded-full ' alt="" />
-          <span className='text-center w-full text-sm font-semibold'>{user.username.slice(0, 10)}
-            <span className='text-center w-full text-sm font-semibold'>{user.username.length > 10 && "..."}</span>
+          <img src={user?.profile_image} className='shrink-0 ml-1 h-20 w-20 object-cover rounded-full ' alt="" />
+          <span className='text-center w-full text-sm font-semibold'>{user?.username?.slice(0, 10)}
+            <span className='text-center w-full text-sm font-semibold'>{user?.username?.length > 10 && "..."}</span>
           </span>
           <CiCirclePlus className='text-xl absolute bottom-7 left-17 bg-white text-black rounded-full' />
         </div>
@@ -167,16 +172,22 @@ if(loader){
 
                 <div className='flex pt-3 px-2 pb-2 w-full justify-between items-center text-white'>
                   <div className='flex gap-2 items-center cursor-pointer '
-                  onClick={()=>navigate(`/personprofile/${item.user._id}`)}
+                  onClick={()=>{
+                    if(item.user._id===user?.id){
+                      navigate(`/profile`)
+                    }else{
+                      navigate(`/personprofile/${item.user._id}`)
+                    }
+                  }}
                   >
-                    <img className='h-8 rounded-full w-8 shrink-0 ' src={item.user.profile_image} alt="" />
-                    <p>{item.user.username}</p>
+                    <img className='h-8 rounded-full w-8 shrink-0 ' src={item.user?.profile_image} alt="" />
+                    <p>{item.user?.username}</p>
                   </div>
                   <button
                     onClick={() => followbtn(item.user._id,item.isfollow)}
 
                     className='px-3 py-1 text-sm border-2 active:scale-95 transition-all duration-200 ease-in-out capitalize border-amber-50 rounded-lg text-white'
-                    style={{ display: user.id === item.user._id ? "none" : "block" }}
+                    style={{ display: user?.id === item.user._id ? "none" : "block" }}
                   >{item.isfollow ? "following" : "follow"}</button>
 
 <DeleteToggle item={item} user={user}/>

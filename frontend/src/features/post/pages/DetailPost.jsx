@@ -109,8 +109,8 @@ const DetailPost = () => {
                     <>
                       <section className='flex gap-2 items-center p-3'>
 
-                        <div>
-                          <img src={item.user.profile_image} className='h-10 w-10 rounded-full' alt="" />
+                        <div className='shrink-0'>
+                          <img src={item.user.profile_image} className='h-10 w-10 rounded-full shrink-0' alt="" />
                         </div>
                         <div className='flex flex-col self-start'>
                           <p className='text-zinc-700 text-xl'>{item.user.username}</p>

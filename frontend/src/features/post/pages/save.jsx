@@ -6,13 +6,13 @@ import { useNavigate } from 'react-router-dom'
 
 const Save = () => {
   const navigate = useNavigate()
-  // const { setallpost, allpost, handlegetallpost, savepost } = Useauth()
+  const { setallpost, allpost, handlegetallpost, savepost } = Useauth()
 
   const { post,saver } = usePost()
 
-  // useEffect(() => {
-  //   handlegetallpost()
-  // }, [])
+  useEffect(() => {
+    handlegetallpost()
+  }, [])
 
 
   return (

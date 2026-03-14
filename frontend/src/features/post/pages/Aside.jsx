@@ -4,15 +4,25 @@ import { Useauth } from '../../auth/hooks/auth.hook'
 import { useEffect } from 'react'
 import { Logout } from '../../auth/services/auth.api'
 
-const navItems = [
-  { to: '/', label: 'Feed', icon: '⌂' },
-  { to: '/create', label: 'Post', icon: '+' },
-  { to: '/save', label: 'Saved', icon: '◈' },
-  { to: '/search', label: 'Search', icon: '⌕' },
-  { to: '/reel', label: 'Reels', icon: '▷' },
-  { to: '/profile', label: 'Profile', icon: '◉' },
-]
+import {
+  Home,
+  PlusSquare,
+  Bookmark,
+  Search,
+  Clapperboard,
+  User,
+   Sparkles
+} from "lucide-react";
 
+const navItems = [
+  { to: "/", label: "Feed", icon: Home },
+  { to: "/create", label: "Post", icon: PlusSquare },
+  { to: "/save", label: "Saved", icon: Bookmark },
+  { to: "/search", label: "Search", icon: Search },
+  { to: "/reel", label: "Reels", icon: Clapperboard },
+  { to: "/profile", label: "Profile", icon: User },
+  { to: "/moodify", label: "Moodify", icon: Sparkles },
+];
 const Aside = () => {
   const navigate=useNavigate()
   const { user, handlegetallpost, fetchUser } = Useauth()
@@ -252,13 +262,15 @@ const Aside = () => {
         <div className="divider" />
 
         <ul className="nav-list">
-          {navItems.map(({ to, label, icon }) => (
+          {navItems.map(({ to, label, icon: Icon }) => (
             <li className="nav-item" key={to}>
               <NavLink
                 to={to}
                 className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}
               >
-                <i className="nav-icon">{icon}</i>
+                <i className="nav-icon flex items-center justify-center">
+                  <Icon size={20} />
+                </i>
                 {label}
               </NavLink>
             </li>

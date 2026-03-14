@@ -21,7 +21,8 @@ const PostRoute = async (req, res) => {
     // }
 
     // const decoded=jwt.verify(token,process.env.JWT_SECRET)
-    console.log(req.file, req.body)
+    // console.log(req.file, req.body)
+    
 
     const userpost = await image.files.upload({
         file: await toFile(Buffer.from(req.file.buffer), 'file'),
@@ -33,7 +34,8 @@ const PostRoute = async (req, res) => {
             caption: req.body.caption,
             post_url: userpost.url,
             mediatype: userpost.fileType,
-            user: req.user.id
+            user: req.user.id,
+            mood:req.body.mood
         })
 
         const response=await postModel.findById(posts._id).populate("user","-password").lean()
@@ -335,4 +337,40 @@ const deletePost=async(req,res)=>{
     })
 }
 
-module.exports = { PostRoute, GetPost, GetDetailPost, LikePost, Comment, unLikePost, saver, unsaver,deletePost }
+const GetPostByMood=async(req,res)=>{
+    const mood=req.query.mood
+    const post=await postModel.find({mood:mood}).populate("user","-password").lean()
+
+    const response=await Promise.all(post.map(async(item)=>{
+        const likecount=await likemodel.countDocuments({
+            post:item._id
+        })
+        item.likecount=likecount
+        const commentcount=await CommentModel.countDocuments({
+            post:item._id
+        })
+        item.commentcount=commentcount
+        const islike=await likemodel.findOne({
+            post:item._id,
+            user:req.user.id
+        })
+        item.islike=!!islike
+        const isfollow=await followmodel.findOne({
+            follower:req.user.id,
+            followee:item.user._id
+        })
+        item.isfollow=!!isfollow
+        const save=await savemodel.findOne({
+            post:item._id,
+            user:req.user.id
+        })
+        item.save=!!save
+        return item
+    }))
+    res.status(200).json({
+        message:"post by mood",
+        response
+    })
+}
+
+module.exports = { PostRoute, GetPost, GetDetailPost, LikePost, Comment, unLikePost, saver, unsaver,deletePost,GetPostByMood }

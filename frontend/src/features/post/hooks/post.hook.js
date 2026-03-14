@@ -1,14 +1,16 @@
-import { useContext, useEffect } from "react"
+import { useContext, useEffect, useRef } from "react"
 import { Context } from "../post.context"
-import { commentposting, deletepost, detailposting, feedback, folllow, like, personprofile, save, storiya, unfolllow, unlike, unsave, update, upload } from "../services/post.api"
+import { commentposting, deletepost, detailposting, feedback, folllow, like, moodpost, personprofile, save, storiya, unfolllow, unlike, unsave, update, upload } from "../services/post.api"
 import { Useauth } from "../../auth/hooks/auth.hook"
 import { useLoader } from "../../../../Loader.context"
+import { useNavigate } from "react-router-dom"
 
 
 export const usePost = () => {
     const { handlegetallpost, fetchUser,allpost } = Useauth()
-    const { singlepost, setSinglepost,story,setStory,userpersonalprofile,setuserpersonalprofile,post,setpost } = useContext(Context)
+    const { singlepost, setSinglepost,story,setStory,userpersonalprofile,setuserpersonalprofile,post,setpost,mood,setmood } = useContext(Context)
 const {setloader}=useLoader()
+const navigate = useNavigate()
 
     const likeHandle = async (id) => {
 
@@ -21,29 +23,52 @@ const {setloader}=useLoader()
         // await handlegetallpost()
     }
     const followHandle = async (id) => {
-
+setStory((prev)=>{
+  return prev.map((item)=>{
+    if(item._id===id){
+      return{
+        ...item,
+        isfollowing:!item.isfollowing
+      }
+    }
+    return item
+  })
+})
       await  Promise.all([
              folllow(id)
             // await handlegetallpost()
             , personprofileHandle(id,false)
-            ,storyHandle()
+            // ,storyHandle()
             
         ])
     }
     const unfollowHandle = async (id) => {
+      setStory((prev)=>{
+        return prev.map((item)=>{
+          if(item._id===id){
+            return{
+              ...item,
+              isfollowing:!item.isfollowing
+            }
+          }
+          return item
+        })
+      })
       await   Promise.all([
 
             unfolllow(id)
           //  handlegetallpost()
            ,personprofileHandle(id,false)
-           ,storyHandle()
+          //  ,storyHandle()
         ])
     }
     const uploadHandle = async (formset) => {
         try{
-      setloader(true)
-          const res=await Promise.all([upload(formset),handlegetallpost(false)])
-      setpost(prev=>[res.response,...prev])
+      // setloader(true)
+          const res=await upload(formset)
+          setpost(prev=>[res.response,...prev])
+          navigate("/")
+          await handlegetallpost(false)
       
         }finally{
             setloader(false)
@@ -51,16 +76,16 @@ const {setloader}=useLoader()
     }
     const saveHandle = async (id) => {
 
-      await  Promise.all([  save(id)
+      await  save(id)
         // ,handlegetallpost()
-        ])
+        
 
     }
     const unsaveHandle = async (id) => {
 
-        await Promise.all([ unsave(id)
+        await unsave(id)
         // , handlegetallpost()
-        ])
+        
 
     }
 
@@ -89,8 +114,8 @@ const {setloader}=useLoader()
     }
     const storyHandle=async()=>{
         const res=await storiya()
-        setStory(res.user)
         console.log(res.user)
+        setStory(res.user)
     }
 
 
@@ -126,6 +151,9 @@ const deletepostHandle = async (id) => {
 
 }
 
+// const moodpostHandle=async(mood)=>{
+//   const res=await moodpost(mood)
+// }
 
     const liker = (id,islike)=>{
      setpost(prev =>
@@ -192,7 +220,31 @@ useEffect(() => {
     setpost(allpost)
   }, [allpost])
 
-    return ({ likeHandle, unlikeHandle, followHandle, unfollowHandle, uploadHandle, saveHandle, unsaveHandle, detailpostHandle, setSinglepost, singlepost,commentHandle,updateHandle,storyHandle,story,setStory,personprofileHandle,userpersonalprofile,setuserpersonalprofile,HandleFeedBack,saver,liker,post,setpost,followbtn,deletepostHandle })
+  const firstRender = useRef(true)
+
+
+    useEffect(() => {
+
+  if(firstRender.current){
+    firstRender.current = false
+    return
+  }
+
+    if(mood){
+      // Only redirect if NOT on /moodify OR if we are on a mobile screen
+      const isMobile = window.innerWidth < 768; // Tailwind md breakpoint
+      if(window.location.pathname !== '/moodify' || isMobile){
+        const timer=setTimeout(() => {
+          navigate("/moodpost")
+        }, 1000);
+        return()=>clearTimeout(timer)
+      }
+    }
+    
+  }, [mood, navigate])
+
+
+    return ({ likeHandle, unlikeHandle, followHandle, unfollowHandle, uploadHandle, saveHandle, unsaveHandle, detailpostHandle, setSinglepost, singlepost,commentHandle,updateHandle,storyHandle,story,setStory,personprofileHandle,userpersonalprofile,setuserpersonalprofile,HandleFeedBack,saver,liker,post,setpost,followbtn,deletepostHandle,mood,setmood })
 
 
 }

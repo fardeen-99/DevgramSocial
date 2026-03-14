@@ -18,6 +18,8 @@ import Search from './features/post/pages/Search'
 import { Error } from './features/post/pages/error'
 import Buycoffee from './features/post/pages/Buycoffee'
 import BuyMeACoffee from './features/post/pages/Buycoffee'
+import Moodify from './features/post/components/Moodify'
+import Moodpost from './features/post/pages/Moodpost'
 const App = () => {
 
 const router=createBrowserRouter([
@@ -58,6 +60,12 @@ const router=createBrowserRouter([
 {
   path:"/search",
   element:<Search/>
+},{
+  path:"/moodify",
+  element:<Moodify/>
+},{
+  path:"/moodpost",
+  element:<Moodpost/>
 }
   ]
 },{

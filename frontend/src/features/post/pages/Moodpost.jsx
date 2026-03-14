@@ -1,37 +1,42 @@
+// import { usePost } from "../hooks/post.hook"
 import { Useauth } from "../../auth/hooks/auth.hook"
 import { useEffect, useRef, useState } from "react"
 import { FaRegHeart, FaHeart, FaRegBookmark, FaBookmark } from "react-icons/fa";
 import { usePost } from "../../post/hooks/post.hook";
 import { useNavigate } from "react-router-dom";
 
-const Reelsection = () => {
-  
-  const { user, allpost, handlegetallpost } = Useauth()
-  const { likeHandle, unlikeHandle, followHandle, unfollowHandle, saveHandle, unsaveHandle,post,setpost,liker,saver,followbtn } = usePost()
+const Moodpost=()=>{
+    // const {mood}=usePost()
+const { user, allpost, handlegetallpost } = Useauth()
+  const { likeHandle, unlikeHandle, followHandle, unfollowHandle, saveHandle, unsaveHandle,post,setpost,liker,saver,followbtn,mood } = usePost()
   const [expand, setexpand] = useState(null)
   const [play, setplay] = useState(null)
   const [sound, setsound] = useState(null)
   const [captionexpand, setcaptionexpand] = useState(null)
   const navigate = useNavigate()
 
+ useEffect(() => {
+    handlegetallpost(false)
+  }, [])
 
-
-
+  
   const videoRefs = useRef({})
   const observerRef = useRef(null)
 
   const [currentVideoId, setCurrentVideoId] = useState(null)
   const [globalMute, setGlobalMute] = useState(false)
-
+  
   const toggle = (id) => {
-    setexpand((prev) => prev === id ? null : id)
-  }
+      setexpand((prev) => prev === id ? null : id)
+    }
 const [reel,setreel]=useState(allpost || [])
 
 // Intersection Observer Logic
   useEffect(() => {
-
-    if (!allpost?.length) return
+      
+      console.log(post)
+      if (!allpost?.length) return
+      console.log(post)
 
     observerRef.current = new IntersectionObserver(
       (entries) => {
@@ -89,9 +94,9 @@ const [reel,setreel]=useState(allpost || [])
   }
 
 
-  useEffect(() => {
-    handlegetallpost(false)
-  }, [])
+  // useEffect(() => {
+  //   handlegetallpost(false)
+  // }, [])
 
 
 
@@ -107,12 +112,19 @@ const [reel,setreel]=useState(allpost || [])
       setsound(id)
     }
   }
-
+  if(post.filter((poster) => poster.mood === mood).length===0){
+    return (
+      <div className="w-full h-full items-center justify-center flex">
+        <h1 className="text-center text-2xl font-bold text-white">No {mood} posts found</h1>
+      </div>
+    )
+  }
+    
   return (
     <div className="w-full max-w-100 m-auto 2xl:max-w-200 h-screen  overflow-y-scroll snap-y snap-mandatory scroll-smooth flex flex-col relative">
-
+<h1>{mood}</h1>
       {
-        post?.filter((poster) => poster.mediatype === "non-image").map((item) => {
+        post?.filter((poster) => poster.mood === mood).map((item) => {
           return (
             <section
               key={item._id}
@@ -248,5 +260,4 @@ const [reel,setreel]=useState(allpost || [])
     </div>
   )
 }
-
-export default Reelsection
+export default Moodpost

@@ -10,10 +10,12 @@ export const ProviderPost=({children})=>{
     const[story,setStory]=useState([])
     const [userpersonalprofile,setuserpersonalprofile]=useState([])
 const[post,setpost]=useState([])
+const [mood,setmood]=useState("neutral")
+
 
 
     return(
-<Context.Provider value={{singlepost,setSinglepost,story,post,setpost,setStory,userpersonalprofile,setuserpersonalprofile}} >
+<Context.Provider value={{singlepost,setSinglepost,story,post,setpost,setStory,userpersonalprofile,setuserpersonalprofile,mood,setmood}} >
     {children}
 </Context.Provider>
     )

@@ -19,6 +19,10 @@ user:{
     mediatype:{
         type:String,
 required:[true,"file is required"]
+    },
+    mood:{
+        type:String,
+        enum:["funny","sad","neutral","surprised"]
     }
 
 },{

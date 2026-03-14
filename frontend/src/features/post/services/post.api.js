@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const api=axios.create({
-    baseURL:"/api"
+    baseURL:"http://localhost:3000/api"
     ,withCredentials:true
 })
 
@@ -64,5 +64,9 @@ export const feedback=async(name,message)=>{
 }
 export const deletepost=async(id)=>{
     const res=await api.delete(`/post/delete/${id}`)
+    return res.data
+}
+export const moodpost=async(mood)=>{
+    const res=await api.get(`/post/my-mood/?mood=${mood}`)
     return res.data
 }
