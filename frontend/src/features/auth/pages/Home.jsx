@@ -165,6 +165,7 @@ if(loader){
   <p className='text-white  '>Suggested for you</p>
   <p className='text-blue-700  cursor-pointer'>older Post</p>
   </div> */}
+  
 
         {
           post?.map((item) => {
@@ -243,6 +244,7 @@ if(loader){
 
                   </div>
                   <div 
+                  className='text-[22px] cursor-pointer mr-1 md:mr-0'
                   onClick={()=>saver(item._id,item.save)}
                   >
                   {item.save ? <FaBookmark  /> : <FaRegBookmark />}

@@ -2,8 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { FaceLandmarker, FilesetResolver } from "@mediapipe/tasks-vision";
 import { usePost } from "../hooks/post.hook";
 import Moodpost from "../pages/Moodpost";
+import { useNavigate } from "react-router-dom";
 
 const Moodify = () => {
+  const navigate = useNavigate();
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   
@@ -11,6 +13,9 @@ const Moodify = () => {
   const [faceLandmarker, setFaceLandmarker] = useState(null);
   const [isDetecting, setIsDetecting] = useState(false);
   const { mood, setmood } = usePost();
+
+
+  const refu=useRef(true)
 
   // Initialize mediapipe
   useEffect(() => {
@@ -105,9 +110,17 @@ const Moodify = () => {
       );
 
       if (results.faceBlendshapes.length > 0) {
+        refu.current=false
         const moodDetected = detectMood(results.faceBlendshapes[0]);
         setLocalMood(moodDetected);
         setmood(moodDetected);
+
+        const isMobile = window.innerWidth < 768; // Tailwind md breakpoint
+        if (isMobile) {
+          setTimeout(() => {
+            navigate("/moodpost");
+          }, 1000);
+        }
       }
     } catch (err) {
       console.error("Detection error:", err);
@@ -157,7 +170,7 @@ const Moodify = () => {
           {/* Mood badge overlay */}
           <div className="absolute top-4 right-4 z-30 px-4 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-sm font-semibold text-cyan-300 shadow-lg flex items-center gap-2">
             <span className="text-lg">{moodEmoji[localMood] || "👀"}</span>
-            <span className="capitalize">{mood}</span>
+            <span className="capitalize">{`${refu.current?"Waiting...":mood}`}</span>
           </div>
 
           {!faceLandmarker && (

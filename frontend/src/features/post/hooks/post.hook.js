@@ -223,31 +223,31 @@ useEffect(() => {
     setpost(allpost)
   }, [allpost])
 
-  const firstRender = useRef(true)
 
+  const personalfollow=(id,userfollow)=>{
 
-    useEffect(() => {
+    setuserpersonalprofile(prev=>{
+        if(prev.id===id){
+          return{
+          ...prev,
+          userfollow:!userfollow
+          }
+        }
+        return prev
+      }
+   )
 
-  if(firstRender.current){
-    firstRender.current = false
-    return
+if(userfollow){
+  unfollowHandle(id)
+}else{
+  followHandle(id)
+}
+
   }
 
-    if(mood){
-      // Only redirect if NOT on /moodify OR if we are on a mobile screen
-      const isMobile = window.innerWidth < 768; // Tailwind md breakpoint
-      if(window.location.pathname !== '/moodify' || isMobile){
-        const timer=setTimeout(() => {
-          navigate("/moodpost")
-        }, 1000);
-        return()=>clearTimeout(timer)
-      }
-    }
-    
-  }, [mood, navigate])
 
 
-    return ({ likeHandle, unlikeHandle, followHandle, unfollowHandle, uploadHandle, saveHandle, unsaveHandle, detailpostHandle, setSinglepost, singlepost,commentHandle,updateHandle,storyHandle,story,setStory,personprofileHandle,userpersonalprofile,setuserpersonalprofile,HandleFeedBack,saver,liker,post,setpost,followbtn,deletepostHandle,mood,setmood })
+    return ({ likeHandle, unlikeHandle, followHandle, unfollowHandle, uploadHandle, saveHandle, unsaveHandle, detailpostHandle, setSinglepost, singlepost,commentHandle,updateHandle,storyHandle,story,setStory,personprofileHandle,userpersonalprofile,setuserpersonalprofile,HandleFeedBack,saver,liker,post,setpost,followbtn,deletepostHandle,mood,setmood,personalfollow })
 
 
 }
