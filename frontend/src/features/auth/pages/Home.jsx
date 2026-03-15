@@ -11,7 +11,7 @@ import { FaBookmark } from "react-icons/fa";
 import { usePost } from '../../post/hooks/post.hook';
 import { CiCirclePlus } from "react-icons/ci";
 import StoryHub from '../../post/components/StoryHub';
-
+import { ScanFace,Heart} from "lucide-react";
 import { GoPlus } from "react-icons/go";
 import Caption from '../../post/components/Caption';
 import { useLoader } from '../../../../Loader.context';
@@ -118,12 +118,13 @@ if(loader){
   return (
     <>
 
-      <nav className='flex justify-between md:hidden items-center mt-1 p-2 text-white  w-full'>
-        <GoPlus className='text-4xl'
-          onClick={() => navigate("/create")}
+      <nav className='flex justify-between md:hidden items-center mt-1 mx-1 p-2 text-white  w-full'>
+        <ScanFace size={40}
+          onClick={() => navigate("/moodify")}
         />
         <img src="/devgram2.png" className='w-full h-15 object-cover devgram' alt="" />
-        <FaRegHeart className='text-2xl mr-1' 
+        <Heart size={35} 
+        className='mr-2'
         onClick={()=>navigate("/buy_A_coffee")}
         />
       </nav>

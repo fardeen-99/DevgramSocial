@@ -58,10 +58,10 @@ setloader(true)
   }
 
   return (
-    <div className='h-full w-full flex items-center justify-center bg-[#0C1014]'>
+    <div className='min-h-screen w-full flex items-center justify-center py-4 overflow-y-auto bg-[#0C1014]'>
 
       <form
-        className='flex flex-col items-center justify-center gap-2 w-full max-w-md px-4'
+        className='flex flex-col items-center justify-center md:gap-2 w-full max-w-md px-4'
         onSubmit={submitUpload}
       >
 
@@ -139,7 +139,7 @@ setloader(true)
 
           {/* mood */}
 {fileType==="video" && (
-  <div className='flex flex-wrap gap-2'>
+  <div className='md:flex w-full md:justify-center  grid grid-cols-2 gap-4  md:gap-2'>
                     {yourmood.map((item,index)=>{
                       return(
                         <button

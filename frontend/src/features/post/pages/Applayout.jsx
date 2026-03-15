@@ -15,14 +15,15 @@ const Applayout = () => {
 </div>
 <div
   className={`flex-1 h-full overflow-y-scroll relative bg-[#0C1014] 
-  ${location.pathname.startsWith("/reel") ? "pb-0" : "pb-18 md:pb-0"}`}
+ ${location.pathname.startsWith("/reel") || location.pathname.startsWith("/moodpost") ? "pb-0" : "pb-15 md:pb-0"} `}
 >
 
   <Outlet/>
 
 </div>
     </div>
- {!location.pathname.startsWith("/reel") && <Footer />}
+    <Footer />
+ {/* {!location.pathname.startsWith("/reel") && } */}
     </>
   )
 }

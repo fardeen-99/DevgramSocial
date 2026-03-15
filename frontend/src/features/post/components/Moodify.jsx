@@ -124,11 +124,11 @@ const Moodify = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center md:flex-row w-full min-h-screen bg-black overflow-hidden relative">
+    <div className="flex flex-col items-center  justify-center md:flex-row w-full min-h-screen bg-black overflow-y-auto relative">
 
       
       {/* LEFT SIDE: Camera Section */}
-      <div className="w-full md:w-1/2 flex flex-col items-center justify-center p-6 border-b md:border-b-0 md:border-r border-white/10 shrink-0 h-[60vh] md:h-screen bg-black z-10">
+      <div className="w-full md:w-1/2 flex flex-col items-center justify-center p-6 md:border-r border-white/10 shrink-0 h-[60vh] md:h-screen bg-black z-10">
         {/* Title */}
         <div className="text-center mb-6">
           <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">
@@ -140,7 +140,7 @@ const Moodify = () => {
         </div>
 
         {/* Camera Feed */}
-        <div className="relative w-full max-w-sm aspect-video rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-black/50 mb-8 mt-2 group">
+        <div className="relative min-h-70 w-full max-w-sm aspect-video rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-black/50 mb-8 mt-2 group">
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent z-10 pointer-events-none"></div>
           <video
             ref={videoRef}
@@ -157,7 +157,7 @@ const Moodify = () => {
           {/* Mood badge overlay */}
           <div className="absolute top-4 right-4 z-30 px-4 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-sm font-semibold text-cyan-300 shadow-lg flex items-center gap-2">
             <span className="text-lg">{moodEmoji[localMood] || "👀"}</span>
-            <span className="capitalize">{localMood}</span>
+            <span className="capitalize">{mood}</span>
           </div>
 
           {!faceLandmarker && (
@@ -175,7 +175,7 @@ const Moodify = () => {
         <button
           onClick={detect}
           disabled={isDetecting || !faceLandmarker}
-          className="w-full max-w-sm py-4 bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-base rounded-xl shadow-[0_0_20px_rgba(6,182,212,0.3)] transition-all active:scale-95 focus:outline-none focus:ring-2 focus:ring-cyan-500 flex items-center justify-center gap-3"
+          className="w-full cursor-pointer max-w-sm py-4 bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-base rounded-xl shadow-[0_0_20px_rgba(6,182,212,0.3)] transition-all active:scale-95 focus:outline-none focus:ring-2 focus:ring-cyan-500 flex items-center justify-center gap-3"
         >
           {isDetecting ? (
             <>
@@ -198,7 +198,7 @@ const Moodify = () => {
       </div>
 
       {/* RIGHT SIDE: Reel Section */}
-      <div className="hidden md:block md:w-1/2  md:h-screen relative bg-black">
+      <div className="hidden md:block md:w-1/2  md:h-screen md:relative bg-black">
         <Moodpost />
       </div>
     </div>  

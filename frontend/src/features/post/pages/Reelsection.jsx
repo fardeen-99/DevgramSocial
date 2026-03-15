@@ -5,9 +5,9 @@ import { usePost } from "../../post/hooks/post.hook";
 import { useNavigate } from "react-router-dom";
 
 const Reelsection = () => {
-  
+
   const { user, allpost, handlegetallpost } = Useauth()
-  const { likeHandle, unlikeHandle, followHandle, unfollowHandle, saveHandle, unsaveHandle,post,setpost,liker,saver,followbtn } = usePost()
+  const { likeHandle, unlikeHandle, followHandle, unfollowHandle, saveHandle, unsaveHandle, post, setpost, liker, saver, followbtn } = usePost()
   const [expand, setexpand] = useState(null)
   const [play, setplay] = useState(null)
   const [sound, setsound] = useState(null)
@@ -26,9 +26,9 @@ const Reelsection = () => {
   const toggle = (id) => {
     setexpand((prev) => prev === id ? null : id)
   }
-const [reel,setreel]=useState(allpost || [])
+  const [reel, setreel] = useState(allpost || [])
 
-// Intersection Observer Logic
+  // Intersection Observer Logic
   useEffect(() => {
 
     if (!allpost?.length) return
@@ -109,44 +109,44 @@ const [reel,setreel]=useState(allpost || [])
   }
 
   return (
-    <div className="w-full max-w-100 m-auto 2xl:max-w-200 h-screen  overflow-y-scroll snap-y snap-mandatory scroll-smooth flex flex-col relative">
+    <div className="w-full max-w-100 m-auto 2xl:max-w-200 h-[100dvh] md:h-full  overflow-y-scroll snap-y snap-mandatory scroll-smooth flex flex-col relative">
 
       {
         post?.filter((poster) => poster.mediatype === "non-image").map((item) => {
           return (
             <section
               key={item._id}
-              className='w-full h-screen snap-start relative text-xl capitalize font-semibold flex flex-col gap-1'
+              className='w-full h-full shrink-0 snap-start relative text-xl capitalize font-semibold flex flex-col gap-1 bg-black'
             >
 
               {/* User Info */}
-              <div className='flex pt-3 px-2 pb-2 w-full flex-col absolute md:bottom-3 bottom-16 z-99 gap-2 text-white'>
+              <div className='flex pt-3 px-2 pb-2 w-full flex-col absolute bottom-16 md:bottom-4 z-10 gap-2 text-white'>
                 <div className='flex gap-2 items-center cursor-pointer transition-all'>
                   <img className='h-8 rounded-full w-8 shrink-0 object-cover' src={item.user.profile_image} alt="" />
                   <p
-                  className="cursor-pointer"
-                  onClick={()=>{
-                    console.log(item)
-                    // console.log(user.id)
-                    {
-                      item.user._id === user.id?
-                      navigate("/profile")
-                    :
-                      navigate(`/personprofile/${item.user._id}`)
-                    }
-                  }}
+                    className="cursor-pointer"
+                    onClick={() => {
+                      console.log(item)
+                      // console.log(user.id)
+                      {
+                        item.user._id === user.id ?
+                          navigate("/profile")
+                          :
+                          navigate(`/personprofile/${item.user._id}`)
+                      }
+                    }}
                   >{item.user.username}</p>
 
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation()
-                   followbtn(item.user._id,item.isfollow)
-                  }}
-                  className={`${item.user.username === user.username ? "hidden" : ""} px-3 py-1 text-sm border-2 active:scale-95 cursor-pointer transition-all duration-200 ease-in-out capitalize border-amber-50 rounded-lg text-white`}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      followbtn(item.user._id, item.isfollow)
+                    }}
+                    className={`${item.user.username === user.username ? "hidden" : ""} px-3 py-1 text-sm border-2 active:scale-95 cursor-pointer transition-all duration-200 ease-in-out capitalize border-amber-50 rounded-lg text-white`}
                   >
-                  {item.isfollow ? "following" : "follow"}
-                </button>
-                  </div>
+                    {item.isfollow ? "following" : "follow"}
+                  </button>
+                </div>
                 <span className="text-zinc-200 text-sm text-wrap w-[80%] cursor-pointer">{item._id === captionexpand ? item.caption : item.caption.slice(0, 30)}
                   <span className="">
                     {
@@ -165,37 +165,37 @@ const [reel,setreel]=useState(allpost || [])
               {/* Video Section */}
               <div className='flex flex-col w-full h-full text-white relative'>
 
-                         {/* VIDEO SECTION */}
-              <video
-                ref={(el) => videoRefs.current[item._id] = el}
-                data-id={item._id}
-                muted={globalMute}
-                loop
-                playsInline
-                className="h-screen w-full object-cover"
-                src={item.post_url}
-              />
+                {/* VIDEO SECTION */}
+                <video
+                  ref={(el) => videoRefs.current[item._id] = el}
+                  data-id={item._id}
+                  muted={globalMute}
+                  loop
+                  playsInline
+                  className="h-full w-full object-cover"
+                  src={item.post_url}
+                />
 
 
                 {/* Sound Icon */}
-             <div
-                className='absolute top-3 right-3 cursor-pointer'
-                onClick={toggleSound}
-              >
-                {
-                  globalMute
-                    ? <img src="/mute.png" className="h-6" />
-                    : <img src="/sound.png" className="h-6" />
-                }
-              </div>
+                <div
+                  className='absolute top-3 right-3 cursor-pointer'
+                  onClick={toggleSound}
+                >
+                  {
+                    globalMute
+                      ? <img src="/mute.png" className="h-6" />
+                      : <img src="/sound.png" className="h-6" />
+                  }
+                </div>
 
                 {/* Right Side Icons */}
-                <div className='flex text-2xl gap-4 px-2 flex-col absolute bottom-20 md:bottom-10 right-2 text-white'>
+                <div className='flex text-2xl gap-4 px-2 flex-col absolute bottom-16 md:bottom-4 right-2 text-white z-20'>
 
                   {/* Like */}
                   <div
                     className='flex flex-col gap-1 items-center cursor-pointer active:scale-95 transition-all'
-                    onClick={() => liker(item._id,item.islike)}
+                    onClick={() => liker(item._id, item.islike)}
                   >
                     {item.islike
                       ? <FaHeart className='text-red-500' />
@@ -230,9 +230,12 @@ const [reel,setreel]=useState(allpost || [])
                   <div className="flex flex-col gap-5 items-center">
 
                     <svg aria-label="Share" className="x1lliihq x1n2onr6 xyb1xck cursor-pointer active:scale-95 transition-all" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>Share</title><path d="M13.973 20.046 21.77 6.928C22.8 5.195 21.55 3 19.535 3H4.466C2.138 3 .984 5.825 2.646 7.456l4.842 4.752 1.723 7.121c.548 2.266 3.571 2.721 4.762.717Z" fill="none" stroke="currentColor" strokeLinejoin="round" strokeWidth="2"></path><line fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" x1="7.488" x2="15.515" y1="12.208" y2="7.641"></line></svg>
-                    <div onClick={() => saver(item._id,item.save)}>
+                    <div onClick={(e) => {
+                      e.stopPropagation()
+                      saver(item._id, item.save)
+                    }}>
 
-                    {item.save ? <FaBookmark className="cursor-pointer active:scale-95 transition-all" /> : <FaRegBookmark className="cursor-pointer active:scale-95 transition-all"/>}
+                      {item.save ? <FaBookmark className="cursor-pointer active:scale-95 transition-all" /> : <FaRegBookmark className="cursor-pointer active:scale-95 transition-all" />}
                     </div>
                     <svg aria-label="More" className="x1lliihq x1n2onr6 xyb1xck cursor-pointer active:scale-95 transition-all" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>More</title><circle cx="12" cy="12" r="1.5"></circle><circle cx="6" cy="12" r="1.5"></circle><circle cx="18" cy="12" r="1.5"></circle></svg>
                   </div>

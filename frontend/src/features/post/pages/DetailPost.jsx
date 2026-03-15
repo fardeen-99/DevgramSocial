@@ -63,14 +63,21 @@ const DetailPost = () => {
             
             item={singlepost} user={user}/>
 </div>
-            <div className='flex-1 min-h-0'>
+            <div className='flex-1 min-h-0 relative'>
               {
                 singlepost.mediatype === "image" ? (
                   <img src={singlepost.post_url} alt="detailpost" className='rounded-lg  h-full w-full object-cover ' />
                 ) : (
-                  <video src={singlepost.post_url} autoPlay loop muted={sound !== singlepost._id} alt="detailpost" className='rounded-lg  h-full w-full object-cover '
-                    onClick={() => soundHandle(singlepost._id)}
-                  />
+                  <>
+                    <video src={singlepost.post_url} autoPlay loop muted={sound !== singlepost._id} alt="detailpost" className='rounded-lg  h-full w-full object-cover '
+                      onClick={() => soundHandle(singlepost._id)}
+                    />
+                    <div className='absolute bottom-3 right-3 cursor-pointer'
+                      onClick={() => soundHandle(singlepost._id)}
+                    >
+                      {sound === singlepost._id ? <img src='/sound.png' className='h-6' /> : <img src='/mute.png' className='h-6' />}
+                    </div>
+                  </>
                 )
               }
             </div>
@@ -101,7 +108,7 @@ const DetailPost = () => {
           <div className='h-full flex-1 flex w-full flex-col bg-[#0C1014] relative overflow-y-scroll '>
             <h1 className='text-white h-10 font-bold text-center text-2xl p-3'>Comments Section</h1>
 
-            <div className='flex flex-col gap-2 p-3 flex-1 overflow-y-scroll'>
+            <div className='flex flex-col gap-2 p-3 flex-1 min-h-50 overflow-y-scroll'>
               {
                 singlepost.comment?.sort((a, b) => b.createdAt - a.createdAt).map((item) => {
 

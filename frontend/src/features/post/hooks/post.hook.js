@@ -156,6 +156,7 @@ const deletepostHandle = async (id) => {
 // }
 
     const liker = (id,islike)=>{
+      console.log("hello")
      setpost(prev =>
       prev.map(item=>{
        if(item._id===id){
@@ -198,6 +199,8 @@ const deletepostHandle = async (id) => {
     }
     
     const saver=(id,save)=>{
+      console.log("hello")
+      console.log(id,save)
     setpost(prev=>prev.map((item)=>{
       if(item._id===id){
         return{
