@@ -12,7 +12,7 @@ Devgram is a rich, modern, and interactive social media web application designed
 
 ---
 
-## ✨ Outstanding Features
+#✨ Outstanding Features
 
 - 🎭 **Moodify (AI Emotion Detection):** Utilizes Google MediaPipe to scan your face via webcam in real-time, instantly detecting your mood and dynamically filtering reels and posts to match how you feel.
 - 📱 **Seamless Social Experience:** Create, like, save, and comment on posts smoothly, just like your favorite social platforms. Follow other users to build your network.
