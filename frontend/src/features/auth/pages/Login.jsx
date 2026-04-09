@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Useauth } from '../hooks/auth.hook'
+import { loginSchema } from '../validation/auth.schema'
+import { useToast } from '../../../contexts/toast.context.jsx'
+import { firstZodErrorMessage } from '../../../utils/zodToast'
 
 const Login = () => {
     const [form, setForm] = useState({ username: '', password: '' })
@@ -8,6 +11,7 @@ const Login = () => {
     const [focused, setFocused] = useState('')
     const navigate = useNavigate()
     const { Loginhandle, loading } = Useauth()
+    const { showToast } = useToast()
 
     const inputChange = (e) => {
         const { name, value } = e.target
@@ -16,9 +20,17 @@ const Login = () => {
 
     const submitForm = async (e) => {
         e.preventDefault()
-        await Loginhandle(form)
-        setForm({ username: '', password: '' })
-        navigate('/')
+        const parsed = loginSchema.safeParse(form)
+        if (!parsed.success) {
+            showToast(firstZodErrorMessage(parsed.error) || "Invalid input", "warning")
+            return
+        }
+
+        const ok = await Loginhandle(form)
+        if (ok) {
+            setForm({ username: '', password: '' })
+            navigate('/')
+        }
     }
 
     return (

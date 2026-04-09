@@ -4,6 +4,8 @@ import { commentposting, deletepost, detailposting, feedback, folllow, like, moo
 import { Useauth } from "../../auth/hooks/auth.hook"
 import { useLoader } from "../../../../Loader.context"
 import { useNavigate } from "react-router-dom"
+import { useToast } from "../../../contexts/toast.context.jsx"
+import { getErrorMessage } from "../../../utils/errorMessage"
 
 
 export const usePost = () => {
@@ -11,6 +13,7 @@ export const usePost = () => {
     const { singlepost, setSinglepost,story,setStory,userpersonalprofile,setuserpersonalprofile,post,setpost,mood,setmood } = useContext(Context)
 const {setloader}=useLoader()
 const navigate = useNavigate()
+const { showToast } = useToast()
 
     const likeHandle = async (id) => {
 
@@ -155,7 +158,7 @@ const deletepostHandle = async (id) => {
 //   const res=await moodpost(mood)
 // }
 
-    const liker = (id,islike)=>{
+    const liker = async (id,islike)=>{
       console.log("hello")
      setpost(prev =>
       prev.map(item=>{
@@ -170,10 +173,27 @@ const deletepostHandle = async (id) => {
       })
      )
     
-     if(islike){
-      unlikeHandle(id)
-     }else{
-      likeHandle(id)
+     try{
+      if(islike){
+        await unlikeHandle(id)
+      }else{
+        await likeHandle(id)
+      }
+     }catch(err){
+      // rollback optimistic update
+      setpost(prev =>
+        prev.map(item=>{
+          if(item._id===id){
+            return{
+              ...item,
+              islike:islike,
+              likecount:islike ? item.likecount + 1 : item.likecount - 1
+            }
+          }
+          return item
+        })
+      )
+      showToast(getErrorMessage(err, "Action failed"), "error")
      }
     }
     

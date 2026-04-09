@@ -2,7 +2,7 @@ const express=require("express")
 const IdentifyToken=require("../middlewares/auth.middleware")
 const multer=require("multer")
 
-const { AuthValidation } = require("../validation/auth.validation")
+const { AuthValidation,loginValidation } = require("../validation/auth.validation")
 // const {body,validationResult}=require("express-validator")
 // import {AuthValidation} from "../validation/auth.validation.js"
 

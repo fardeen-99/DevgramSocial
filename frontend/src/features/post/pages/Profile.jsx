@@ -6,11 +6,10 @@ import Post from '../components/post';
 import Save from '../components/save';
 import { FaRegHeart } from "react-icons/fa";
 import Tag from './Tag';
-import { Logout } from '../../auth/services/auth.api';
 const Profile = () => {
 const navigate=useNavigate()
 
-const {user,allpost,fetchUser,handlegetallpost}=Useauth()
+const {user,allpost,fetchUser,handlegetallpost,LogoutHandle}=Useauth()
 
 const [userprofile, setuserprofile] = useState([])
 const[tab,settab]=useState("post")
@@ -29,7 +28,7 @@ useEffect(()=>{
 
 
 fetchUser()
-// handlegetallpost(false)
+handlegetallpost(false)
 
 },[])
 
@@ -43,10 +42,9 @@ fetchUser()
 <div className=' w-full flex items-end justify-end md:hidden'>
 
                               <button className="w-[30%] py-2 mr-3 bg-zinc-900 rounded-lg text-white font-semibold  "
-                              onClick={()=>{
-                                Logout()
-                                navigate("/login")
-                                
+                              onClick={async()=>{
+                                const ok = await LogoutHandle()
+                                if (ok) navigate("/login")
                               }}
                               >Logout</button>
                               </div>

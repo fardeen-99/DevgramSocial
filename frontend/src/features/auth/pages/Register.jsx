@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Useauth } from '../hooks/auth.hook'
+import { registerSchema } from '../validation/auth.schema'
+import { useToast } from '../../../contexts/toast.context.jsx'
+import { firstZodErrorMessage } from '../../../utils/zodToast'
 
 // ── Reusable floating label input ─────────────────────────────────────────
 const FloatingInput = ({ name, label, type, value, focused, onChange, onFocus, onBlur }) => (
@@ -33,13 +36,14 @@ const FloatingInput = ({ name, label, type, value, focused, onChange, onFocus, o
 )
 
 const Register = () => {
-  const [form, setForm] = useState({ username: '', email: '', password: '' })
+  const [form, setForm] = useState({ username: '', email: '', password: '', confirmPassword: '' })
   const [showPass, setShowPass] = useState(false)
   const [focused, setFocused] = useState('')
   const [file, setFile] = useState(null)
   const [preview, setPreview] = useState(null)
   const navigate = useNavigate()
   const { loading, RegisterHandle } = Useauth()
+  const { showToast } = useToast()
 
   const inputChange = (e) => {
     const { name, value } = e.target
@@ -54,17 +58,25 @@ const Register = () => {
 
   const submitForm = async (e) => {
     e.preventDefault()
+    const parsed = registerSchema.safeParse(form)
+    if (!parsed.success) {
+      showToast(firstZodErrorMessage(parsed.error) || "Invalid input", "warning")
+      return
+    }
+
     const formdata = new FormData()
     formdata.append('username', form.username)
     formdata.append('email', form.email)
     formdata.append('password', form.password)
-    formdata.append('file', file)
-    await RegisterHandle(formdata)
-    setForm({ username: '', email: '', password: '' })
-    navigate('/')
+    if (file) formdata.append('file', file)
+    const ok = await RegisterHandle(formdata)
+    if (ok) {
+      setForm({ username: '', email: '', password: '', confirmPassword: '' })
+      navigate('/')
+    }
   }
 
-  const isReady = form.username && form.email && form.password && !loading
+  const isReady = form.username && form.email && form.password && form.confirmPassword && !loading
 
   return (
     <main className="min-h-screen bg-[#000000] flex flex-col items-center justify-center px-4">
@@ -191,6 +203,15 @@ const Register = () => {
                 </button>
               )}
             </div>
+
+            {/* Confirm password */}
+            <FloatingInput
+              name="confirmPassword" label="Confirm password" type={showPass ? 'text' : 'password'}
+              value={form.confirmPassword} focused={focused}
+              onChange={inputChange}
+              onFocus={() => setFocused('confirmPassword')}
+              onBlur={() => setFocused('')}
+            />
 
             {/* Terms */}
             <p className="text-[11px] text-[#a8a8a8] text-center leading-[1.5] mt-2 px-1">

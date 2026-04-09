@@ -6,12 +6,13 @@ const jwt = require("jsonwebtoken")
 const ImageKit = require("@imagekit/nodejs")
 const { toFile } = require("@imagekit/nodejs")
 const redis = require("../config/Cache")
+const ErrorHandler = require("../utils/Error.util")
 const image = new ImageKit({
   privateKey: process.env.IMAGEKIT_PRIVATE_KEY
 })
 
 
-const Register = async (req, res) => {
+const Register = async (req, res, next) => {
   try {
     const { username, email, password, bio } = req.body
 
@@ -40,9 +41,7 @@ const Register = async (req, res) => {
 
 
     if (ISUSERALREADYEXIST) {
-      return res.status(409).json({
-        message: "this user already exist"
-      })
+      return next(new ErrorHandler(409,"this user already exist"))
     }
 
     const hash = await bcrypt.hash(password, 10)
@@ -67,14 +66,13 @@ const Register = async (req, res) => {
       }
     })
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: error.message });
+   next(error)
   }
 }
 
 
 
-const Login = async (req, res) => {
+const Login = async (req, res, next) => {
   try {
     const { email, username, password } = req.body
 
@@ -91,17 +89,13 @@ const Login = async (req, res) => {
     })
 
     if (!user) {
-      return res.status(401).json({
-        message: "this user not exist"
-      })
+      return next(new ErrorHandler(401, "this user not exist"))
     }
 
     const hash = await bcrypt.compare(password, user.password)
 
     if (!hash) {
-      return res.status(401).json({
-        message: "your password is incorrect"
-      })
+      return next(new ErrorHandler(401, "your password is incorrect"))
     }
 
     const token = jwt.sign({
@@ -122,13 +116,13 @@ const Login = async (req, res) => {
       }
     })
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: error.message });
+   
+    next(error);
   }
 }
 
 
-const Logout = async (req, res) => {
+const Logout = async (req, res, next) => {
   try {
     const token = req.cookies.token
     res.clearCookie("token")
@@ -139,19 +133,17 @@ const Logout = async (req, res) => {
     })
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: error.message });
+    next(error);
   }
 }
-const Getme = async (req, res) => {
+const Getme = async (req, res, next) => {
   try {
     const id = req.user.id
 
     const user = await usermodel.findById(id)
 
     if (!user) {
-      return res.status(401).json(
-        { message: "unAuthorized access" }
-      )
+      return next(new ErrorHandler(401, "unAuthorized access"))
     }
 
     const follower = await followmodel.countDocuments({
@@ -177,11 +169,10 @@ const Getme = async (req, res) => {
       }
     })
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: error.message });
+   next(error)
   }
 }
-const Update = async (req, res) => {
+const Update = async (req, res, next) => {
   try {
 
     const userId = req.params.id
@@ -211,9 +202,7 @@ const Update = async (req, res) => {
 
     // Agar kuch bhi nahi aaya
     if (Object.keys(updateData).length === 0) {
-      return res.status(400).json({
-        message: "No data provided for update"
-      })
+      return next(new ErrorHandler(400, "No data provided for update"))
     }
 
     const updatedUser = await usermodel.findByIdAndUpdate(
@@ -228,10 +217,8 @@ const Update = async (req, res) => {
     })
 
   } catch (error) {
-    console.log(error)
-    res.status(500).json({
-      message: error.message
-    })
+  
+    next(error)
   }
 }
 

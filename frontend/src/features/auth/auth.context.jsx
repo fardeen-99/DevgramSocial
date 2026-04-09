@@ -14,7 +14,7 @@ export const Provider=({children})=>{
     const [allpost,setallpost]=useState([])
 const [savepost,setsavepost]=useState([])
   const [showDelete, setShowDelete] = useState(false)
-
+  const [kala, setKala] = useState(false)
 const{setloader}=useLoader()
 
 
@@ -58,7 +58,7 @@ handlegetallpost()
 
 
 return(
-    <Context.Provider  value={{user,loading,allpost,setallpost,setuser,savepost,setsavepost,setloading,fetchUser,handlegetallpost,showDelete,setShowDelete}} >
+    <Context.Provider  value={{user,loading,allpost,setallpost,setuser,savepost,setsavepost,setloading,fetchUser,handlegetallpost,showDelete,setShowDelete,kala,setKala}} >
         {children}
     </Context.Provider>
 )

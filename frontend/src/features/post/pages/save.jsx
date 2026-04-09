@@ -11,7 +11,7 @@ const Save = () => {
   const { post,saver } = usePost()
 
   useEffect(() => {
-    handlegetallpost()
+    handlegetallpost(false)
   }, [])
 
 

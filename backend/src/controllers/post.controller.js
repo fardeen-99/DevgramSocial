@@ -6,23 +6,13 @@ const followmodel = require("../models/follow.model")
 const CommentModel = require("../models/comment.model")
 const savemodel = require('../models/save.model')
 const { toFile } = require("@imagekit/nodejs")
+const ErrorHandler = require('../utils/Error.util')
 const image = new ImageKit({
-    privateKey:process.env.IMAGEKIT_PRIVATE_KEY
+    privateKey: process.env.IMAGEKIT_PRIVATE_KEY
 })
 
-const PostRoute = async (req, res) => {
-
-    // const token=req.cookies.token
-
-    // if(!token){
-    //     return res.status(404).json({
-    //         message:"token inValid"
-    //     })
-    // }
-
-    // const decoded=jwt.verify(token,process.env.JWT_SECRET)
-    // console.log(req.file, req.body)
-    
+const PostRoute = async (req, res,next) => {
+    try{
 
     const userpost = await image.files.upload({
         file: await toFile(Buffer.from(req.file.buffer), 'file'),
@@ -30,32 +20,32 @@ const PostRoute = async (req, res) => {
         folder: "insta-clone-final"
     })
 
-        const posts = await postModel.create({
-            caption: req.body.caption,
-            post_url: userpost.url,
-            mediatype: userpost.fileType,
-            user: req.user.id,
-            mood:req.body.mood
-        })
+    const posts = await postModel.create({
+        caption: req.body.caption,
+        post_url: userpost.url,
+        mediatype: userpost.fileType,
+        user: req.user.id,
+        mood: req.body.mood
+    })
 
-        const response=await postModel.findById(posts._id).populate("user","-password").lean()
+    const response = await postModel.findById(posts._id).populate("user", "-password").lean()
 
-        const likecount=await likemodel.countDocuments({post:posts._id})
-        response.likecount=likecount
+    const likecount = await likemodel.countDocuments({ post: posts._id })
+    response.likecount = likecount
 
-     
 
-        const commentcount=await CommentModel.countDocuments({post:posts._id})
-        response.commentcount=commentcount
 
-        const islike=await likemodel.findOne({post:posts._id,user:req.user.id})
-        response.islike=!!islike
+    const commentcount = await CommentModel.countDocuments({ post: posts._id })
+    response.commentcount = commentcount
 
-        const isfollow=await followmodel.findOne({follower:req.user.id,followee:posts.user})
-        response.isfollow=!!isfollow
+    const islike = await likemodel.findOne({ post: posts._id, user: req.user.id })
+    response.islike = !!islike
 
-        const save=await savemodel.findOne({post:posts._id,user:req.user.id})
-        response.save=!!save
+    const isfollow = await followmodel.findOne({ follower: req.user.id, followee: posts.user })
+    response.isfollow = !!isfollow
+
+    const save = await savemodel.findOne({ post: posts._id, user: req.user.id })
+    response.save = !!save
 
 
 
@@ -66,10 +56,15 @@ const PostRoute = async (req, res) => {
         message: "post created succesfully"
         , response
     })
+    }
+    catch(error){
+        next(error)
+    }
 
 }
 
-const GetPost = async (req, res) => {
+const GetPost = async (req, res,next) => {
+try{
 
     const allpost = await postModel.find().populate("user", "-password").lean().sort({ createdAt: -1 })
 
@@ -126,14 +121,17 @@ const GetPost = async (req, res) => {
         final
     })
 
-
+}
+catch(error){
+    next(error)
+}
 
 
 }
 
-const GetDetailPost = async (req, res) => {
+const GetDetailPost = async (req, res,next) => {
 
-
+try{
     const id = req.params.id
 
     const detailpost = await postModel.findById(id).populate("user", "-password").lean()
@@ -146,9 +144,7 @@ const GetDetailPost = async (req, res) => {
 
 
     if (!verification) {
-        return res.status(403).json({
-            message: "forbidden the data"
-        })
+        return next(new ErrorHandler(403,"forbidden the data"))
     }
 
     const likecount = await likemodel.countDocuments({
@@ -190,15 +186,20 @@ const GetDetailPost = async (req, res) => {
     })
 
 }
+catch(error){
+    next(error)
+}
 
-const LikePost = async (req, res) => {
+
+}
+
+const LikePost = async (req, res,next) => {
+    try{
     const user = req.user.id
     const post = req.params.id
 
     if (!post) {
-        return res.status(404).json({
-            message: "post not found"
-        })
+        return next(new ErrorHandler(404,"post not found"))
     }
 
     const islike = await likemodel.findOne({
@@ -207,9 +208,7 @@ const LikePost = async (req, res) => {
     })
 
     if (islike) {
-        return res.status(400).json({
-            message: "you already like this post"
-        })
+        return next(new ErrorHandler(409, "you already like this post"))
     }
 
     const like = await likemodel.create({
@@ -221,13 +220,17 @@ const LikePost = async (req, res) => {
         message: "like done successfully",
         like
     })
-
+    }
+    catch(error){
+        next(error)
+    }
 
 }
 
 
-const Comment = async (req, res) => {
+const Comment = async (req, res,next) => {
 
+    try{
     const { comment } = req.body
 
     const user = req.user.id
@@ -236,9 +239,7 @@ const Comment = async (req, res) => {
     console.log(comment)
 
     if (!post) {
-        return res.status(404).json({
-            message: "post not found"
-        })
+        return next(new ErrorHandler(404, "post not found"))
     }
 
     const Usercoment = await CommentModel.create({
@@ -249,20 +250,20 @@ const Comment = async (req, res) => {
         message: "your comment is registered succesfully"
         , Usercoment
     })
-
+    }catch(error){
+        next(error)
+    }
 
 }
 
-const unLikePost = async (req, res) => {
-
+const unLikePost = async (req, res,next) => {
+    try{
     const post = await likemodel.findOne({
         user: req.user.id,
         post: req.params.id
     })
     if (!post) {
-        return res.status(404).json({
-            message: "post not found"
-        })
+        return next(new ErrorHandler(404,"post not found"))
     }
 
     const response = await likemodel.findByIdAndDelete(post._id)
@@ -270,24 +271,24 @@ const unLikePost = async (req, res) => {
     res.status(200).json({
         message: "post disliked"
     })
-
+    }catch(error){
+        next(error)
+    }
 
 
 
 }
 
 
-const saver = async (req, res) => {
-
+const saver = async (req, res,next) => {
+    try{
     const save = await savemodel.findOne({
         post: req.params.id
         , user: req.user.id
     })
 
     if (save) {
-        return res.status(409).json({
-            message: "this post is already saved"
-        })
+        return next(new ErrorHandler(409,"this post is already saved"))
     }
 
     const response = await savemodel.create({
@@ -299,18 +300,19 @@ const saver = async (req, res) => {
         message: "post is saved",
         response
     })
+}catch(error){
+    next(error)
 }
-const unsaver = async (req, res) => {
-
+}
+const unsaver = async (req, res,next) => {
+    try{
     const save = await savemodel.findOne({
         post: req.params.id
         , user: req.user.id
     })
 
     if (!save) {
-        return res.status(404).json({
-            message: "this post is not found for save"
-        })
+        return next(new ErrorHandler(404,"this post is not found for save"))
     }
 
     const response = await savemodel.findByIdAndDelete(save._id)
@@ -320,57 +322,67 @@ const unsaver = async (req, res) => {
         response
     })
 }
-
-
-const deletePost=async(req,res)=>{
-    const id=req.params.id
-    const post=await postModel.findById(id)
-    if(!post){
-        return res.status(404).json({
-            message:"post not found"
-        })
-    }
-    const response=await postModel.findByIdAndDelete(id)
-    res.status(200).json({
-        message:"post deleted successfully",
-        response
-    })
+catch(error){
+    next(error)
+}
 }
 
-const GetPostByMood=async(req,res)=>{
-    const mood=req.query.mood
-    const post=await postModel.find({mood:mood}).populate("user","-password").lean()
 
-    const response=await Promise.all(post.map(async(item)=>{
-        const likecount=await likemodel.countDocuments({
-            post:item._id
+const deletePost = async (req, res,next) => {
+    try{
+    const id = req.params.id
+    const post = await postModel.findById(id)
+    if (!post) {
+        return next(new ErrorHandler(404,"post not found"))
+    }
+    const response = await postModel.findByIdAndDelete(id)
+    res.status(200).json({
+        message: "post deleted successfully",
+        response
+    })
+    }catch(error){
+        next(error)
+    }
+}
+
+const GetPostByMood = async (req, res,next) => {
+    try{
+    const mood = req.query.mood
+    const post = await postModel.find({ mood: mood }).populate("user", "-password").lean()
+
+    const response = await Promise.all(post.map(async (item) => {
+        const likecount = await likemodel.countDocuments({
+            post: item._id
         })
-        item.likecount=likecount
-        const commentcount=await CommentModel.countDocuments({
-            post:item._id
+        item.likecount = likecount
+        const commentcount = await CommentModel.countDocuments({
+            post: item._id
         })
-        item.commentcount=commentcount
-        const islike=await likemodel.findOne({
-            post:item._id,
-            user:req.user.id
+        item.commentcount = commentcount
+        const islike = await likemodel.findOne({
+            post: item._id,
+            user: req.user.id
         })
-        item.islike=!!islike
-        const isfollow=await followmodel.findOne({
-            follower:req.user.id,
-            followee:item.user._id
+        item.islike = !!islike
+        const isfollow = await followmodel.findOne({
+            follower: req.user.id,
+            followee: item.user._id
         })
-        item.isfollow=!!isfollow
-        const save=await savemodel.findOne({
-            post:item._id,
-            user:req.user.id
+        item.isfollow = !!isfollow
+        const save = await savemodel.findOne({
+            post: item._id,
+            user: req.user.id
         })
-        item.save=!!save
+        item.save = !!save
         return item
     }))
     res.status(200).json({
-        message:"post by mood",
+        message: "post by mood",
         response
     })
+}catch(error){
+    next(error)
+}
 }
 
-module.exports = { PostRoute, GetPost, GetDetailPost, LikePost, Comment, unLikePost, saver, unsaver,deletePost,GetPostByMood }
+module.exports = { PostRoute, GetPost, GetDetailPost, LikePost, Comment, unLikePost, saver, unsaver, deletePost, GetPostByMood }

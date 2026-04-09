@@ -2,7 +2,6 @@ import React from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { Useauth } from '../../auth/hooks/auth.hook'
 import { useEffect } from 'react'
-import { Logout } from '../../auth/services/auth.api'
 
 import {
   Home,
@@ -25,7 +24,7 @@ const navItems = [
 ];
 const Aside = () => {
   const navigate=useNavigate()
-  const { user, handlegetallpost, fetchUser } = Useauth()
+  const { user, fetchUser, LogoutHandle } = Useauth()
 
   useEffect(() => {
     fetchUser()
@@ -285,10 +284,9 @@ const Aside = () => {
             <img src={user?.profile_image} alt="" />
           </div>
           <button className="logout-btn"
-          onClick={()=>{
-            Logout()
-            navigate("/login")
-
+          onClick={async()=>{
+            const ok = await LogoutHandle()
+            if (ok) navigate("/login")
           }}
           >Logout</button>
         </div>

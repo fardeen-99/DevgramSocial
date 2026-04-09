@@ -14,16 +14,44 @@ import StoryHub from '../../post/components/StoryHub';
 import { ScanFace,Heart} from "lucide-react";
 import { GoPlus } from "react-icons/go";
 import Caption from '../../post/components/Caption';
-import { useLoader } from '../../../../Loader.context';
-import Loadera from '../../../../Loader';
 import DeleteToggle from '../components/DeleteToggle';
 
+
+const StoryRowSkeleton = () => (
+
+  <section className='text-white p-3 mt-2 pt-0 md:pt-2 md:mt-2 w-full flex gap-3 overflow-x-scroll'>
+    {Array.from({ length: 15 }).map((_, i) => (
+      <div key={i} className='flex flex-col gap-2 shrink-0 items-center'>
+        <div className='h-20 w-20 rounded-full animate-pulse bg-gradient-to-r from-zinc-800 via-zinc-700 to-zinc-800' />
+        <div className='h-3 w-16 rounded animate-pulse bg-gradient-to-r from-zinc-800 via-zinc-700 to-zinc-800' />
+      </div>
+    ))}
+  </section>
+)
+
+const PostSkeleton = () => (
+  <section className='w-full text-xl capitalize font-semibold pb-6 flex flex-col gap-2'>
+    <div className='flex pt-3 px-2 pb-2 w-full justify-between items-center'>
+      <div className='flex gap-2 items-center'>
+        <div className='h-8 w-8 rounded-full animate-pulse bg-gradient-to-r from-zinc-800 via-zinc-700 to-zinc-800 shrink-0' />
+        <div className='h-4 w-28 rounded animate-pulse bg-gradient-to-r from-zinc-800 via-zinc-700 to-zinc-800' />
+      </div>
+      <div className='h-7 w-20 rounded animate-pulse bg-gradient-to-r from-zinc-800 via-zinc-700 to-zinc-800' />
+    </div>
+    <div className='h-130 w-full rounded-xl animate-pulse bg-gradient-to-r from-zinc-800 via-zinc-700 to-zinc-800' />
+    <div className='flex text-xl px-2 pt-1 justify-between w-full'>
+      <div className='h-5 w-24 rounded animate-pulse bg-gradient-to-r from-zinc-800 via-zinc-700 to-zinc-800' />
+      <div className='h-5 w-10 rounded animate-pulse bg-gradient-to-r from-zinc-800 via-zinc-700 to-zinc-800' />
+    </div>
+  </section>
+)
 
 const Home = () => {
 
   const [expand, setexpand] = useState(null)
   const [play, setplay] = useState(null)
   const [sound, setsound] = useState(null)
+  const [fakeLoading, setFakeLoading] = useState(true)
 
   const navigate = useNavigate()
 
@@ -34,8 +62,7 @@ const Home = () => {
 
 
 
-const {setloader,loader}=useLoader()
-  const { user, allpost, handlegetallpost,fetchUser, } = Useauth()
+  const { user, allpost, handlegetallpost,fetchUser,kala,setKala } = Useauth()
   
   
 
@@ -77,6 +104,23 @@ useEffect(()=>{
               handlegetallpost(false)
             
           }, [])
+
+   
+
+          useEffect(() => {
+            if (kala) {
+              setFakeLoading(false)
+              return
+            }
+
+            setFakeLoading(true)
+            const t = setTimeout(() => {
+              setFakeLoading(false)
+              setKala(true)
+            }, 4000)
+
+            return () => clearTimeout(t)
+          }, [kala, setKala])
  
 
 
@@ -106,13 +150,7 @@ const scrollLeft = () => {
   })
 }
 
-if(loader){
-  return (
-    <div>
-      <Loadera/>
-    </div>
-  )
-}
+const isLoading = fakeLoading
 
 
   return (
@@ -129,23 +167,27 @@ if(loader){
         />
       </nav>
 
-      <section 
-        ref={scrollRef}
-      className='text-white p-3 mt-2  
-      transform relative
-      pt-0 md:pt-2 md:mt-2 w-full flex gap-3 overflow-x-scroll'>
-        <div className='flex  flex-col gap-1 relative shrink-0 '
-        onClick={()=>navigate(`/profile`)}
-        >
-          <img src={user?.profile_image} className='shrink-0 ml-1 h-20 w-20 object-cover rounded-full ' alt="" />
-          <span className='text-center w-full text-sm font-semibold'>{user?.username?.slice(0, 10)}
-            <span className='text-center w-full text-sm font-semibold'>{user?.username?.length > 10 && "..."}</span>
-          </span>
-          <CiCirclePlus className='text-xl absolute bottom-7 left-17 bg-white text-black rounded-full' />
-        </div>
+      {isLoading ? (
+        <StoryRowSkeleton />
+      ) : (
+        <section 
+          ref={scrollRef}
+        className='text-white p-3 mt-2  
+        transform relative
+        pt-0 md:pt-2 md:mt-2 w-full flex gap-3 overflow-x-scroll'>
+          <div className='flex  flex-col gap-1 relative shrink-0 '
+          onClick={()=>navigate(`/profile`)}
+          >
+            <img src={user?.profile_image} className='shrink-0 ml-1 h-20 w-20 object-cover rounded-full ' alt="" />
+            <span className='text-center w-full text-sm font-semibold'>{user?.username?.slice(0, 10)}
+              <span className='text-center w-full text-sm font-semibold'>{user?.username?.length > 10 && "..."}</span>
+            </span>
+            <CiCirclePlus className='text-xl absolute bottom-7 left-17 bg-white text-black rounded-full' />
+          </div>
 
-        <StoryHub />
-      </section>
+          <StoryHub />
+        </section>
+      )}
         <button
   onClick={scrollLeft}
   className="text-white absolute md:block hidden left-0 top-10  bg-gray-800/50 px-1 rounded shrink-0"
@@ -167,7 +209,9 @@ if(loader){
   </div> */}
   
 
-        {
+        {isLoading ? (
+          Array.from({ length: 4 }).map((_, i) => <PostSkeleton key={i} />)
+        ) : (
           post?.map((item) => {
             return (
               <section key={item._id} className='w-full text-xl capitalize font-semibold pb-6    flex flex-col gap-1'>
@@ -182,7 +226,7 @@ if(loader){
                     }
                   }}
                   >
-                    <img className='h-8 rounded-full w-8 shrink-0 ' src={item.user?.profile_image} alt="" />
+                    <img className='h-8 rounded-full w-8 object-cover shrink-0' src={item.user?.profile_image} alt="" />
                     <p>{item.user?.username}</p>
                   </div>
                   <button
@@ -256,7 +300,7 @@ if(loader){
               </section>
             )
           })
-        }
+        )}
       </section>
 
 
