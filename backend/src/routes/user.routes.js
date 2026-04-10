@@ -11,7 +11,7 @@ UserFollowRouter.post("/request/reject/:id",authRouter,Reject)
 UserFollowRouter.post("/unfollow/:id",authRouter,UnfollowRoute)
 UserFollowRouter.get("/story",authRouter,StoryRoute)
 UserFollowRouter.get("/personprofile/:id",authRouter,PersonProfile)
-// UserFollowRouter.post("/userAlldetail",authRouter,useralldetail)
+
 
 
 
