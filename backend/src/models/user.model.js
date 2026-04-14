@@ -26,6 +26,7 @@ const userSchema=new mongoose.Schema({
     }
 })
 
+
 const usermodel=mongoose.model("insta-user",userSchema)
 
 
