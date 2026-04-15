@@ -19,13 +19,13 @@ const Register = async (req, res, next) => {
     let profileImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3wkBh42q4A0io62WEJtwLmWIrGpBmdV2ddw&s"
 
     // 2️⃣ Agar file aayi tabhi upload karo
+
     if (req.file) {
       const profilePic = await image.files.upload({
         file: await toFile(Buffer.from(req.file.buffer), 'file'),
         fileName: username,
         folder: "insta-clone-Dp"
       })
-
       profileImageUrl = profilePic.url
     }
 

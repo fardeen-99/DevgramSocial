@@ -1,0 +1,31 @@
+Project Overview: Khanplexity
+Khanplexity is an advanced AI-powered knowledge platform designed to provide deep contextual intelligence and real-time information. It bridges the gap between traditional search engines and AI assistants by offering multimodal input (text & image), real-time streaming responses, and sophisticated multi-agent orchestration.
+
+1. The Elevatator Pitch (Short & Effective)
+"I built Khanplexity, a full-stack AI platform that integrates multiple LLMs like Gemini and Mistral through a LangChain-based agentic architecture. It doesn't just chat; it uses real-time web search via Tavily to provide fact-checked answers and supports multimodal inputs using ImageKit. I focused heavily on the user experience by implementing Server-Sent Events (SSE) for real-time streaming and a premium, responsive UI built with React and Framer Motion."
+
+2. Technical Deep Dive (For the Interviewer)
+Architecture & Logic (The "Brain")
+Agentic Framework: Uses LangChain to orchestrate AI agents. I implemented a primary agent based on Gemini 2.5 Flash for its vision capabilities and a fallback mechanism using Mistral Small if the primary model fails.
+Real-time Intelligence: Integrated Tavily Search as a custom tool, allowing the AI to browse the internet to answer queries about current events.
+Advanced Prompt Engineering: Implemented complex system prompts that handle multilingual outputs (English, Hindi, and Hinglish) and ensure the AI remains context-aware of the current date and time.
+Multimodal Processing: Built support for image analysis by integrating ImageKit for image hosting and passing binary data/URLs to the LLM vision engines.
+Backend Engineering
+Real-time Streaming: Instead of waiting for a full response, I used Server-Sent Events (SSE) and Socket.io to stream chunks of text to the user as they are generated, significantly reducing perceived latency.
+Scalable State: Used MongoDB with Mongoose for persistent chat history and Redis for efficient caching and state management.
+Secure Auth: Implemented a robust authentication system using JWT (JSON Web Tokens) and BcryptJS, with secure cookie handling.
+Frontend & UI/UX
+Premium Aesthetic: Used Tailwind CSS 4.0 and Framer Motion to create a high-end, glassmorphic design that feels alive with micro-animations and smooth transitions.
+State Management: leveraged Redux Toolkit to manage complex global states across the chat interface and user profile.
+Performance: Built with Vite for ultra-fast development and build times, ensuring a snappy developer experience and end-user performance.
+3. Key Challenges You Solved
+Handling Stream Disruptions: I implemented robust error handling within the SSE flow to ensure that if a stream is interrupted, the user receives a graceful error message without the app crashing.
+Multi-Model Failover: I designed a service layer that automatically detects model failures and switches to a secondary LLM provider mid-request, ensuring 100% availability.
+Hinglish Scripting: I fine-tuned system prompts to ensure the AI uses Latin characters (Romanized Hindi) for Hinglish speakers, avoiding the common mistake of AI switching to Devanagari script involuntarily.
+4. Tech Stack At-a-Glance
+Frontend: React 19, Vite, Redux Toolkit, Tailwind CSS, Framer Motion, Lucide.
+Backend: Node.js, Express, Socket.io, Redis, MongoDB.
+AI/ML: LangChain, Google Gemini, Mistral AI, OpenAI, Tavily Search API.
+Infrastructure: ImageKit (Media), Resend (Email), Multer (File Handling).
+Pro-Tip for the Interview:
+When they ask "Why did you build this?", answer with: "I wanted to explore how AI Agents can go beyond simple text prediction by autonomously using tools like web search to provide high-accuracy, real-time data while maintaining a premium, high-performance interface."

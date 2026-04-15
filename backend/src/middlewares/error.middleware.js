@@ -2,7 +2,7 @@ async function HandleError(err, req, res, next) {
 
 
     err.statusCode = err.statusCode || 500;
-    err.message = err.message || "Internal server error";
+    err.message = err.message || "Interal sernver error";
     res.status(err.statusCode).json({
         success:false,
         message:err.message,
