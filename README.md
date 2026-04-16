@@ -17,7 +17,7 @@ Devgram is a rich, modern, and interactive social media web application designed
 - 🎭 **Moodify (AI Emotion Detection):** Utilizes Google MediaPipe to scan your face via webcam in real-time, instantly detecting your mood and dynamically filtering reels and posts to match how you feel.
 - 📱 **Seamless Social Experience:** Create, like, save, and comment on posts smoothly, just like your favorite social platforms. Follow other users to build your network.
 - 🎞️ **Immersive Reels:** Endless scrollable video feeds with a custom Intersection Observer implementation that smartly auto-plays and pauses videos as you scroll.
-- 🎨 **Sleek UI/UX:** A stunning, fully responsive Dark Mode interface built natively with Tailwind CSS, featuring glassmorphism, fluid animations, and a rich aesthetic.
+- 🎨 **Sleek UI/UX:** A stunning, fully responsive Dark Mode qnd the interface built natively with Tailwind CSS, featuring glassmorphism, fluid animations, and a rich aesthetic.
 - 🔐 **Secure Authentication:** Robust JWT-based authentication ensures your data and identity remain private and secure.
 
 ## 🛠️ Technology Stack
